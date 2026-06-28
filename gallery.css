@@ -1,15 +1,17 @@
 /* ====================================
-   Gallery section background
+   Gallery section
 ==================================== */
 
 .gallery-section {
+  position: relative;
+  overflow: clip;
   background:
-    radial-gradient(circle at top left, rgba(180, 136, 80, 0.1), transparent 28%),
+    radial-gradient(circle at top left, rgba(180, 136, 80, 0.1), transparent 30%),
     linear-gradient(180deg, #f4ede4 0%, #eee4d8 100%);
 }
 
 /* ====================================
-   Gallery layout - base (mobile / small)
+   Gallery layout
 ==================================== */
 
 .photo-frame {
@@ -18,164 +20,185 @@
 
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.7rem;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(14rem, 24vw, 20rem);
+  grid-auto-rows: clamp(8.5rem, 9vw, 10.5rem);
+  gap: 0.9rem;
+  align-items: stretch;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.15rem 0 0.6rem;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* Card base */
+.photo-grid::-webkit-scrollbar {
+  display: none;
+}
 
 .gallery-card {
   margin: 0;
   overflow: hidden;
+  min-width: 0;
   min-height: 0;
   border: 1px solid var(--color-line);
-  border-radius: 24px;
+  border-radius: 1.8rem;
   background: rgba(251, 247, 241, 0.84);
   box-shadow: var(--shadow-soft);
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .gallery-card:hover {
-  transform: translateY(-2px) scale(1.01);
+  transform: translateY(-3px);
   box-shadow: 0 24px 56px rgba(48, 39, 31, 0.12);
+  border-color: rgba(48, 39, 31, 0.18);
 }
 
 .gallery-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
-/* Aspect ratios for sizes */
+/* Aspect ratios for collage sizes */
 
 .card-small {
-  aspect-ratio: 1 / 1;     /* square */
+  grid-row: span 1;
+  aspect-ratio: auto;
 }
 
 .card-medium {
-  aspect-ratio: 3 / 2;     /* landscape 3:2 */
+  grid-row: span 1;
+  aspect-ratio: auto;
 }
 
 .card-large {
-  aspect-ratio: 16 / 9;    /* wide hero */
+  grid-row: span 2;
+  aspect-ratio: auto;
 }
 
-/* ====================================
-   Gallery layout - desktop (2-row strip)
-==================================== */
-
+/* Keep the two-row strip clear on desktop */
 @media (min-width: 1024px) {
-  .gallery-head {
-    margin-bottom: 1.5rem;
-  }
-
-  .photo-frame {
-    overflow: hidden;
-  }
-
   .photo-grid {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 280px;
-    grid-template-rows: repeat(2, 1fr);
-    gap: 12px;
-    height: clamp(450px, 48vw, 540px);
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 0 0 0.5rem;
-    justify-content: start;
-    align-content: start;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 0;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    grid-auto-columns: clamp(16rem, 18vw, 22rem);
+    grid-auto-rows: clamp(9.5rem, 9vw, 11.5rem);
+    gap: 1rem;
+    padding-bottom: 0.8rem;
   }
 
-  .photo-grid::-webkit-scrollbar {
-    display: none;
+  .card-large {
+    grid-row: span 2;
   }
 
-  .gallery-card {
-    aspect-ratio: auto;
-    height: 100%;
-    min-width: 0;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    border-radius: 1.9rem;
-  }
-
+  .card-medium,
   .card-small {
     grid-row: span 1;
   }
 
-  .card-medium {
-    grid-row: span 1;
+  .gallery-card {
+    height: 100%;
+  }
+}
+
+/* Mobile / small screens: compact grid, no compression */
+@media (max-width: 1023px) {
+  .photo-grid {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(13.5rem, 70vw);
+    grid-auto-rows: auto;
+    scroll-snap-type: x proximity;
   }
 
-  /* Hero card spans both rows */
+  .card-small,
+  .card-medium,
   .card-large {
-    grid-row: span 2;
+    grid-row: auto;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
   }
 }
 
-/* ====================================
-   Gallery controls (arrows + fade)
-==================================== */
-
-.photo-scroll-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2.6rem;
-  height: 2.6rem;
-  border-radius: 999px;
-  border: 1px solid var(--color-line);
-  background: rgba(252, 248, 242, 0.9);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-muted);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(14px);
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    background var(--transition),
-    color var(--transition);
-  z-index: 2;
-}
-
-.photo-scroll-btn:hover {
-  transform: translateY(-50%) translateY(-1px);
-  box-shadow: 0 18px 40px rgba(48, 39, 31, 0.12);
-  background: rgba(247, 241, 231, 0.96);
-  color: var(--color-text);
-}
-
-.photo-scroll-prev {
-  left: 0.9rem;
-}
-
-.photo-scroll-next {
-  right: 0.9rem;
-}
-
-/* Optional right-edge fade to suggest more content */
-
+/* Edge fade to imply more content */
 @media (min-width: 1024px) {
   .photo-frame::after {
     content: "";
     position: absolute;
     top: 0;
     right: 0;
-    width: 80px;
+    width: clamp(3rem, 4vw, 5.5rem);
     height: 100%;
     pointer-events: none;
     background: linear-gradient(
       to left,
-      rgba(244, 237, 228, 0.95),
+      rgba(244, 237, 228, 0.96),
       rgba(244, 237, 228, 0)
     );
+  }
+}
+
+/* ====================================
+   Gallery controls
+==================================== */
+
+.photo-scroll-btn {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border: 1px solid rgba(48, 39, 31, 0.12);
+  border-radius: 999px;
+  background: rgba(251, 247, 241, 0.82);
+  color: var(--color-text);
+  box-shadow: 0 16px 36px rgba(48, 39, 31, 0.1);
+  backdrop-filter: blur(14px);
+  transform: translateY(-50%);
+  transition:
+    transform var(--transition),
+    background var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+.photo-scroll-btn:hover {
+  transform: translateY(-50%) translateY(-2px);
+  background: rgba(247, 241, 231, 0.96);
+  border-color: rgba(48, 39, 31, 0.2);
+  box-shadow: 0 20px 42px rgba(48, 39, 31, 0.14);
+}
+
+.photo-scroll-btn:focus-visible {
+  outline: 3px solid rgba(180, 136, 80, 0.34);
+  outline-offset: 3px;
+}
+
+.photo-scroll-btn span {
+  font-size: 1.65rem;
+  line-height: 1;
+  transform: translateY(-0.05rem);
+}
+
+.photo-scroll-prev {
+  left: 0.6rem;
+}
+
+.photo-scroll-next {
+  right: 0.6rem;
+}
+
+@media (max-width: 1023px) {
+  .photo-scroll-btn {
+    display: none;
   }
 }

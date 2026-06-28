@@ -33,6 +33,16 @@
         button.getAttribute('data-lang-btn') || button.getAttribute('data-lang-btn-terms');
       button.classList.toggle('is-active', langValue === currentLang);
     });
+
+    // Gallery controls
+    const prevLabel = currentLang === 'pt' ? 'Deslocar galeria para a esquerda' : 'Scroll gallery left';
+    const nextLabel = currentLang === 'pt' ? 'Deslocar galeria para a direita' : 'Scroll gallery right';
+    document.querySelectorAll('.photo-scroll-prev').forEach((button) => {
+      button.setAttribute('aria-label', prevLabel);
+    });
+    document.querySelectorAll('.photo-scroll-next').forEach((button) => {
+      button.setAttribute('aria-label', nextLabel);
+    });
   };
 
   document
