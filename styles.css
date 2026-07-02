@@ -421,7 +421,7 @@ p {
 .story-head {
   display: grid;
   gap: 0.55rem;
-  max-width: 34rem;
+  max-width: 50rem;
 }
 
 .story-copy {
@@ -537,7 +537,7 @@ p {
 
 .story-head h2 {
   font-size: clamp(2rem, 1.3rem + 2vw, 2.75rem);
-  max-width: 10ch;
+  max-width: 20ch;
 }
 
 .story-copy p {

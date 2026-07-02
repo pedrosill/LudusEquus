@@ -79,7 +79,7 @@ window.LUDUS_COPY = {
     navInfo: 'Important info',
     ctaWhatsapp: 'WhatsApp',
     heroEyebrow: 'Private rides · Alqueva · Nature',
-    heroTitle: 'Private, calm horse experiences shaped by the Alqueva landscape.',
+    heroTitle: 'Private, calm horse experiences.',
     heroText: 'Ludus Equus presents horse rides and equestrian moments with close guidance, a quieter pace, and direct WhatsApp contact.',
     heroPrimary: 'Talk on WhatsApp',
     heroSecondary: 'See experiences',
