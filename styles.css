@@ -421,18 +421,23 @@ p {
 .story-head {
   display: grid;
   gap: 0.55rem;
-  max-width: 50rem;
+  max-width: none;
+}
+
+.story-head h2 {
+  max-width: none;
 }
 
 .story-copy {
   display: grid;
   gap: 0.8rem;
-  max-width: 30rem;
+  max-width: none;
 }
 
 .story-side {
   display: grid;
   gap: 0.8rem;
+  justify-items: end;
 }
 
 .stats-card,
@@ -916,17 +921,18 @@ p {
   }
 
   .story-grid {
-    grid-template-columns: minmax(0, 1.12fr) minmax(16rem, 0.55fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(14.5rem, 0.52fr);
     align-items: start;
-    gap: 1.35rem;
+    gap: 1.7rem;
   }
 
   .story-side {
-    justify-items: start;
+    justify-items: end;
+    padding-inline-end: 0.25rem;
   }
 
-  .stats-card {
-    width: min(100%, 18rem);
+  .story-side .stats-card {
+    width: min(100%, 15rem);
   }
 
   .story-image {

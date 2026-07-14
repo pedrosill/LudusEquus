@@ -88,6 +88,7 @@
 /* Keep the two-row strip clear on desktop */
 @media (min-width: 1024px) {
   .photo-grid {
+    grid-auto-flow: column dense;
     grid-auto-columns: clamp(16rem, 18vw, 22rem);
     grid-auto-rows: clamp(9.5rem, 9vw, 11.5rem);
     gap: 1rem;
