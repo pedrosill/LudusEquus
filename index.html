@@ -87,15 +87,6 @@
               <button type="button" class="lang-btn is-active" data-lang-btn="pt">PT</button>
               <button type="button" class="lang-btn" data-lang-btn="en">EN</button>
             </div>
-            <a
-              class="btn btn-primary"
-              href="https://wa.me/+351918241010"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-i18n="ctaWhatsapp"
-            >
-              WhatsApp
-            </a>
           </div>
         </div>
       </div>
@@ -223,7 +214,7 @@
 
           <article class="info-card experience-card">
             <figure class="image-card experience-image">
-              <img src="./imagens/Piquenique.jpeg" alt="Piquenique junto à água com manta e cesta" width="1200" height="900" loading="lazy" decoding="async">
+              <img src="./imagens/pirquenique3.png" alt="Piquenique junto à água com manta e cesta" width="1200" height="900" loading="lazy" decoding="async">
             </figure>
             <div class="experience-copy">
               <h3 data-i18n="rideCustomTitle">Experiências personalizadas</h3>
@@ -238,139 +229,94 @@
       </div>
     </section>
 
-    <!-- Gallery section -->
-    <section class="section gallery-section" id="gallery">
+    <!-- BEGIN: Featured draggable gallery -->
+    <section class="section gallery-strip-section" id="gallery">
       <div class="container">
         <div class="section-head gallery-head reveal">
-          <p class="eyebrow" data-i18n="galleryEyebrow">Galeria</p>
-          <h2 data-i18n="galleryTitle">
-            Mais contexto visual para a paisagem, os cavalos e os momentos no terreno.
+          <p class="eyebrow" data-i18n="galleryFeatureEyebrow">Galeria em movimento</p>
+          <h2 data-i18n="galleryFeatureTitle">
+            Uma vista mais próxima do arquivo, num formato mais imersivo.
           </h2>
-          <p data-i18n="galleryText">
-            A página pode crescer com mais imagens do arquivo, mantendo a leitura simples e muito apoiada na fotografia.
+          <p data-i18n="galleryFeatureText">
+            Este segundo bloco mantém a leitura limpa, mas oferece uma navegação mais tátil para
+            quem quer explorar as imagens com mais atenção.
           </p>
         </div>
 
-        <div class="photo-frame reveal">
-          <button
-            class="photo-scroll-btn photo-scroll-prev"
-            type="button"
-            aria-label="Deslocar galeria para a esquerda"
-          >
-            <span aria-hidden="true"> <- </span>
-          </button>
+        <div class="gallery-strip-shell reveal">
+          <div class="gallery-strip-frame" aria-label="Galeria móvel de imagens">
+            <div
+              class="gallery-strip-track"
+              data-feature-gallery-track
+              data-feature-gallery-prev-percentage="0"
+              data-feature-gallery-mouse-down-at="0"
+            >
+              <article class="gallery-strip-card gallery-strip-text-card gallery-strip-marker-card">
+                <div class="gallery-strip-symbol" aria-hidden="true">
+                  <span class="gallery-strip-symbol-dot"></span>
+                  <span class="gallery-strip-symbol-line"></span>
+                </div>
+                <p class="gallery-strip-kicker">Galeria em movimento</p>
+                <h3>Arraste para atravessar os momentos.</h3>
+              </article>
 
-          <div class="photo-grid" id="photo-grid" tabindex="0" aria-label="Galeria de imagens">
-            <figure class="gallery-card card-large">
-              <img
-                src="./imagens/Galeria/Barragem1.jpeg"
-                alt="Passeio a cavalo junto à água ao pôr do sol"
-                width="1600"
-                height="900"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/Barragem1.jpeg" alt="Passeio junto à água ao pôr do sol" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
 
-            <figure class="gallery-card card-medium">
-              <img
-                src="./imagens/Galeria/passeio1.jpeg"
-                alt="Grupo a cavalo em passeio no campo ao final do dia"
-                width="1200"
-                height="800"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
+              <article class="gallery-strip-card gallery-strip-text-card">
+                <p class="gallery-strip-kicker">Passeios</p>
+                <h3>Ritmo calmo e paisagem aberta.</h3>
+                <p>Uma sequência mais ampla para sentir o percurso, a água e a luz do fim do dia.</p>
+              </article>
 
-            <figure class="gallery-card card-small">
-              <img
-                src="./imagens/Galeria/Barragem2.jpeg"
-                alt="Vista da barragem e da margem do Alqueva"
-                width="1000"
-                height="1000"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/Barragem2.jpeg" alt="Vista da barragem e do percurso equestre" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/Barragem4.jpeg" alt="Cavalos em passeio junto ao Alqueva" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/barragem5.jpeg" alt="Momento de passeio equestre ao ar livre" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
 
-            <figure class="gallery-card card-medium">
-              <img
-                src="./imagens/GenericHorses/internetHorse3.jpg"
-                alt="Cavalo em enquadramento natural entre vegetação e luz suave"
-                width="1200"
-                height="800"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
+              <article class="gallery-strip-card gallery-strip-text-card">
+                <p class="gallery-strip-kicker">Desporto</p>
+                <h3>Energia, técnica e movimento.</h3>
+                <p>Um bloco para separar a leitura das imagens mais dinâmicas do percurso.</p>
+              </article>
 
-            <figure class="gallery-card card-large">
-              <img
-                src="./imagens/Galeria/Piquenique.jpeg"
-                alt="Piquenique junto à água com manta e cesta"
-                width="1600"
-                height="900"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/Desporto1.jpg" alt="Atividade equestre em movimento" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/Desporto2.JPG" alt="Cena de desporto equestre" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/desporto3.JPG" alt="Passeio equestre em ação" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
 
-            <figure class="gallery-card card-small">
-              <img
-                src="./imagens/Galeria/desporto4.JPG"
-                alt="Textura da paisagem junto à água com reflexos"
-                width="1000"
-                height="1000"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
+              <article class="gallery-strip-card gallery-strip-text-card">
+                <p class="gallery-strip-kicker">Momentos</p>
+                <h3>Paragens mais íntimas e leves.</h3>
+                <p>Um espaço para alternar entre fotografia e texto quando quiseres destacar uma fase.</p>
+              </article>
 
-            <figure class="gallery-card card-medium">
-              <img
-                src="./imagens/Galeria/Desporto1.JPG"
-                alt="Momento de desporto equestre com salto de obstáculos"
-                width="1200"
-                height="800"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
-
-            <figure class="gallery-card card-small">
-              <img
-                src="./imagens/Galeria/Desporto2.JPG"
-                alt="Cavaleiro em prova de obstáculos em pista exterior"
-                width="1000"
-                height="1000"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
-            
-            <figure class="gallery-card card-small">
-              <img
-                src="./imagens/Galeria/Desporto3.JPG"
-                alt="Cavaleiro em prova de obstáculos em pista exterior"
-                width="1000"
-                height="1000"
-                loading="lazy"
-                decoding="async"
-              >
-            </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/passeio1.jpeg" alt="Passeio a cavalo em paisagem aberta" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/passeio2.jpeg" alt="Cavalos em percurso tranquilo" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
+              <figure class="gallery-strip-card">
+                <img src="./imagens/Galeria/Piquenique.jpeg" alt="Momento de piquenique junto aos cavalos" width="1200" height="900" loading="lazy" decoding="async" draggable="false">
+              </figure>
+            </div>
           </div>
-
-          <button
-            class="photo-scroll-btn photo-scroll-next"
-            type="button"
-            aria-label="Deslocar galeria para a direita"
-          >
-            <span aria-hidden="true">-></span>
-          </button>
         </div>
       </div>
     </section>
+    <!-- END: Featured draggable gallery -->
 
 
     <!-- Location -->
@@ -561,15 +507,6 @@
           Website informativo para experiências equestres privadas e momentos de campo no Alqueva.
         </p>
       </div>
-
-      <nav class="footer-links" aria-label="Footer">
-        <a href="#who" data-i18n="navWho">Quem somos</a>
-        <a href="#experiences" data-i18n="navExperiences">Experiências</a>
-        <a href="#gallery" data-i18n="navGallery">Galeria</a>
-        <a href="#location" data-i18n="navLocation">Localização</a>
-        <a href="#info" data-i18n="navInfo">Informações importantes</a>
-        <a href="./terms.html" data-i18n="fullTerms">Termos completos</a>
-      </nav>
 
       <div class="footer-social">
         <a

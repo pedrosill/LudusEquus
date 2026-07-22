@@ -1,205 +1,216 @@
 /* ====================================
-   Gallery section
+   Featured draggable gallery
 ==================================== */
 
-.gallery-section {
+/* BEGIN: Featured draggable gallery */
+
+.gallery-strip-section {
   position: relative;
   overflow: clip;
   background:
-    radial-gradient(circle at top left, rgba(180, 136, 80, 0.1), transparent 30%),
-    linear-gradient(180deg, #f4ede4 0%, #eee4d8 100%);
+    radial-gradient(circle at top right, rgba(190, 138, 66, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(249, 244, 235, 0.98));
 }
 
-/* ====================================
-   Gallery layout
-==================================== */
+.gallery-strip-shell {
+  width: min(100%, 62rem);
+  margin-inline: auto;
+}
 
-.photo-frame {
+.gallery-strip-frame {
   position: relative;
-}
-
-.photo-grid {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: clamp(14rem, 24vw, 20rem);
-  grid-auto-rows: clamp(8.5rem, 9vw, 10.5rem);
-  gap: 0.9rem;
-  align-items: stretch;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0.15rem 0 0.6rem;
-  scroll-behavior: smooth;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.photo-grid::-webkit-scrollbar {
-  display: none;
-}
-
-.gallery-card {
-  margin: 0;
   overflow: hidden;
-  min-width: 0;
-  min-height: 0;
-  border: 1px solid var(--color-line);
-  border-radius: 1.8rem;
-  background: rgba(251, 247, 241, 0.84);
-  box-shadow: var(--shadow-soft);
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    border-color var(--transition);
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  min-height: clamp(17rem, 34vw, 24rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-.gallery-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 24px 56px rgba(48, 39, 31, 0.12);
-  border-color: rgba(48, 39, 31, 0.18);
+.gallery-strip-track {
+  display: flex;
+  align-items: stretch;
+  gap: 0.9rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max-content;
+  user-select: none;
+  touch-action: none;
+  cursor: grab;
+  transform: translate(0%, -50%);
+  will-change: transform;
 }
 
-.gallery-card img {
+.gallery-strip-track.is-dragging {
+  cursor: grabbing;
+}
+
+.gallery-strip-card {
+  margin: 0;
+  flex: 0 0 auto;
+  overflow: hidden;
+  width: clamp(10.5rem, 18vw, 13.5rem);
+  aspect-ratio: 4 / 5;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(48, 39, 31, 0.08);
+  background: rgba(251, 247, 241, 0.92);
+  box-shadow: 0 14px 34px rgba(48, 39, 31, 0.08);
+}
+
+.gallery-strip-card:not(.gallery-strip-text-card) {
+  width: clamp(15rem, 26vw, 22rem);
+  aspect-ratio: 4 / 5;
+}
+
+.gallery-strip-text-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  width: clamp(12rem, 20vw, 15rem);
+  padding: 1rem;
+  background:
+    radial-gradient(circle at top, rgba(190, 138, 66, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 252, 247, 0.98), rgba(244, 236, 225, 0.98));
+}
+
+.gallery-strip-marker-card {
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.gallery-strip-symbol {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.25rem;
+  color: var(--color-accent);
+}
+
+.gallery-strip-symbol-dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 0.35rem rgba(190, 138, 66, 0.16);
+}
+
+.gallery-strip-symbol-line {
+  flex: 1;
+  height: 1px;
+  min-width: 1.6rem;
+  background: linear-gradient(90deg, rgba(190, 138, 66, 0.95), rgba(190, 138, 66, 0.12));
+}
+
+.gallery-strip-kicker {
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.gallery-strip-text-card h3 {
+  max-width: none;
+  font-size: clamp(1.08rem, 2vw, 1.4rem);
+  line-height: 1.02;
+}
+
+.gallery-strip-text-card p:last-child {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.gallery-strip-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: 100% center;
+  border-radius: inherit;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
 }
 
-/* Aspect ratios for collage sizes */
-
-.card-small {
-  grid-row: span 1;
-  aspect-ratio: auto;
-}
-
-.card-medium {
-  grid-row: span 1;
-  aspect-ratio: auto;
-}
-
-.card-large {
-  grid-row: span 2;
-  aspect-ratio: auto;
-}
-
-/* Keep the two-row strip clear on desktop */
 @media (min-width: 1024px) {
-  .photo-grid {
-    grid-auto-flow: column dense;
-    grid-auto-columns: clamp(16rem, 18vw, 22rem);
-    grid-auto-rows: clamp(9.5rem, 9vw, 11.5rem);
+  .gallery-strip-frame {
+    min-height: clamp(22rem, 30vw, 33rem);
+  }
+
+  .gallery-strip-track {
     gap: 1rem;
-    padding-bottom: 0.8rem;
   }
 
-  .card-large {
-    grid-row: span 2;
+  .gallery-strip-card {
+    width: clamp(11rem, 16vw, 14rem);
   }
 
-  .card-medium,
-  .card-small {
-    grid-row: span 1;
+  .gallery-strip-card:not(.gallery-strip-text-card) {
+    width: clamp(17rem, 24vw, 24rem);
+    aspect-ratio: 4 / 5;
   }
 
-  .gallery-card {
-    height: 100%;
-  }
-}
-
-/* Mobile / small screens: compact grid, no compression */
-@media (max-width: 1023px) {
-  .photo-grid {
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(13.5rem, 70vw);
-    grid-auto-rows: auto;
-    scroll-snap-type: x proximity;
-  }
-
-  .card-small,
-  .card-medium,
-  .card-large {
-    grid-row: auto;
-    aspect-ratio: 1 / 1;
-    min-height: 0;
+  .gallery-strip-text-card {
+    width: clamp(13rem, 18vw, 16rem);
+    padding: 1.1rem;
   }
 }
 
-/* Edge fade to imply more content */
-@media (min-width: 1024px) {
-  .photo-frame::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: clamp(3rem, 4vw, 5.5rem);
-    height: 100%;
-    pointer-events: none;
-    background: linear-gradient(
-      to left,
-      rgba(244, 237, 228, 0.96),
-      rgba(244, 237, 228, 0)
-    );
+@media (min-width: 760px) and (max-width: 1023px) {
+  .gallery-strip-frame {
+    min-height: clamp(18rem, 36vw, 26rem);
+  }
+
+  .gallery-strip-track {
+    gap: 0.8rem;
+  }
+
+  .gallery-strip-card:not(.gallery-strip-text-card) {
+    width: clamp(14rem, 30vw, 18rem);
+    aspect-ratio: 4 / 5;
+  }
+
+  .gallery-strip-text-card {
+    width: clamp(11.5rem, 22vw, 14rem);
+    padding: 0.95rem;
   }
 }
 
-/* ====================================
-   Gallery controls
-==================================== */
+@media (max-width: 759px) {
+  .gallery-strip-frame {
+    min-height: clamp(16rem, 62vw, 21rem);
+  }
 
-.photo-scroll-btn {
-  position: absolute;
-  top: 50%;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.9rem;
-  height: 2.9rem;
-  border: 1px solid rgba(48, 39, 31, 0.12);
-  border-radius: 999px;
-  background: rgba(251, 247, 241, 0.82);
-  color: var(--color-text);
-  box-shadow: 0 16px 36px rgba(48, 39, 31, 0.1);
-  backdrop-filter: blur(14px);
-  transform: translateY(-50%);
-  transition:
-    transform var(--transition),
-    background var(--transition),
-    box-shadow var(--transition),
-    border-color var(--transition);
-}
+  .gallery-strip-track {
+    gap: 0.6rem;
+  }
 
-.photo-scroll-btn:hover {
-  transform: translateY(-50%) translateY(-2px);
-  background: rgba(247, 241, 231, 0.96);
-  border-color: rgba(48, 39, 31, 0.2);
-  box-shadow: 0 20px 42px rgba(48, 39, 31, 0.14);
-}
+  .gallery-strip-card {
+    width: clamp(9.8rem, 42vw, 11.5rem);
+    border-radius: 1.35rem;
+  }
 
-.photo-scroll-btn:focus-visible {
-  outline: 3px solid rgba(180, 136, 80, 0.34);
-  outline-offset: 3px;
-}
+  .gallery-strip-card:not(.gallery-strip-text-card) {
+    width: clamp(15rem, 78vw, 18.5rem);
+    aspect-ratio: 3 / 4;
+    border-radius: 1.45rem;
+  }
 
-.photo-scroll-btn span {
-  font-size: 1.65rem;
-  line-height: 1;
-  transform: translateY(-0.05rem);
-}
+  .gallery-strip-text-card {
+    width: clamp(11.25rem, 58vw, 13rem);
+    padding: 0.85rem;
+  }
 
-.photo-scroll-prev {
-  left: 0.6rem;
-}
+  .gallery-strip-text-card h3 {
+    font-size: 1rem;
+  }
 
-.photo-scroll-next {
-  right: 0.6rem;
-}
-
-@media (max-width: 1023px) {
-  .photo-scroll-btn {
-    display: none;
+  .gallery-strip-text-card p:last-child {
+    font-size: 0.84rem;
   }
 }
+
+/* END: Featured draggable gallery */

@@ -2,6 +2,15 @@
   const defaultLang = 'pt';
   let currentLang = defaultLang;
 
+  const setHeroViewportUnit = () => {
+    document.documentElement.style.setProperty('--hero-vh', `${window.innerHeight * 0.01}px`);
+  };
+
+  setHeroViewportUnit();
+  window.addEventListener('orientationchange', () => {
+    window.setTimeout(setHeroViewportUnit, 150);
+  });
+
   // ==========================
   // Language handling
   // ==========================
@@ -162,6 +171,17 @@
         closeMenu();
       } else {
         openMenu();
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (menuToggle.getAttribute('aria-expanded') !== 'true') return;
+
+      const clickedInsideMenu = mobileMenu.contains(event.target);
+      const clickedToggle = menuToggle.contains(event.target);
+
+      if (!clickedInsideMenu && !clickedToggle) {
+        closeMenu();
       }
     });
 
@@ -377,22 +397,71 @@
   });
 
   // ==========================
-  // Gallery scroll controls
+  // BEGIN: Featured draggable gallery
   // ==========================
-  const photoGrid = document.getElementById('photo-grid');
-  const prevBtn = document.querySelector('.photo-scroll-prev');
-  const nextBtn = document.querySelector('.photo-scroll-next');
+  const featureGalleryTrack = document.querySelector('[data-feature-gallery-track]');
 
-  if (photoGrid && prevBtn && nextBtn) {
-    const scrollAmount = 260; // roughly one card
+  if (featureGalleryTrack) {
+    const featureGalleryImages = Array.from(featureGalleryTrack.getElementsByTagName('img'));
+    let featureGalleryPointerType = 'mouse';
 
-    const scrollGrid = (delta) => {
-      photoGrid.scrollBy({ left: delta, behavior: 'smooth' });
+    const handlePointerDown = (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      featureGalleryPointerType = event.pointerType || 'mouse';
+      featureGalleryTrack.dataset.mouseDownAt = String(event.clientX);
+      featureGalleryTrack.classList.add('is-dragging');
+      featureGalleryTrack.setPointerCapture(event.pointerId);
     };
 
-    prevBtn.addEventListener('click', () => scrollGrid(-scrollAmount));
-    nextBtn.addEventListener('click', () => scrollGrid(scrollAmount));
+    const handlePointerUp = () => {
+      featureGalleryTrack.dataset.mouseDownAt = '0';
+      featureGalleryTrack.dataset.prevPercentage = featureGalleryTrack.dataset.percentage ?? '0';
+      featureGalleryTrack.classList.remove('is-dragging');
+    };
+
+    const handlePointerMove = (event) => {
+      if (featureGalleryTrack.dataset.mouseDownAt === '0') return;
+
+      const mouseDelta = parseFloat(featureGalleryTrack.dataset.mouseDownAt || '0') - event.clientX;
+      const dragScale =
+        featureGalleryPointerType === 'touch'
+          ? 2.75
+          : featureGalleryPointerType === 'pen'
+            ? 2.1
+            : 1.5;
+      const maxDelta = window.innerWidth * dragScale;
+      const percentage = (mouseDelta / maxDelta) * -100;
+      const nextPercentageUnconstrained =
+        parseFloat(featureGalleryTrack.dataset.prevPercentage || '0') + percentage;
+      const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
+
+      featureGalleryTrack.dataset.percentage = String(nextPercentage);
+
+      featureGalleryTrack.animate(
+        {
+          transform: `translate(${nextPercentage}%, -50%)`,
+        },
+        { duration: 1200, fill: 'forwards' }
+      );
+
+      for (const image of featureGalleryImages) {
+        image.animate(
+          {
+            objectPosition: `${100 + nextPercentage}% center`,
+          },
+          { duration: 1200, fill: 'forwards' }
+        );
+      }
+    };
+
+    featureGalleryTrack.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerUp);
+    window.addEventListener('pointermove', handlePointerMove);
   }
+  // ==========================
+  // END: Featured draggable gallery
+  // ==========================
 
   // Initial language
   applyLanguage(defaultLang);
