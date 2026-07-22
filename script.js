@@ -128,21 +128,8 @@
         return;
       }
 
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY <= 16) {
-        header.classList.remove('is-hidden');
-        lastScrollY = currentScrollY;
-        return;
-      }
-
-      if (currentScrollY > 96 && currentScrollY > lastScrollY + 6) {
-        header.classList.add('is-hidden');
-      } else if (currentScrollY < lastScrollY - 6) {
-        header.classList.remove('is-hidden');
-      }
-
-      lastScrollY = currentScrollY;
+      header.classList.remove('is-hidden');
+      lastScrollY = window.scrollY;
     },
     { passive: true }
   );
