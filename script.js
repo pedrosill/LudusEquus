@@ -57,6 +57,19 @@
       });
     });
 
+  // Keep the homepage landing aligned with the main content on small screens.
+  if (document.querySelector('.hero') && !window.location.hash) {
+    const landingMedia = window.matchMedia('(max-width: 979px)');
+    if (landingMedia.matches) {
+      window.requestAnimationFrame(() => {
+        const main = document.getElementById('main');
+        if (main) {
+          main.scrollIntoView({ block: 'start' });
+        }
+      });
+    }
+  }
+
   // ==========================
   // Menu + header behavior
   // ==========================
