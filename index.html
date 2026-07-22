@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ludus Equus</title>
-  <meta name="description" content="Passeios e ex equestres privadas no Alqueva. Website institucional bilingue da Ludus Equus.">
+  <meta name="description" content="Passeios e experiências equestres privadas no Alqueva. Website institucional bilingue da Ludus Equus.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -22,7 +22,7 @@
   <header class="site-header" id="top">
     <div class="container header-shell">
       <div class="header-inner">
-        <a class="brand" href="#top" aria-label="Ludus Equus, ir para o topo">
+        <a class="brand" href="#main" aria-label="Ludus Equus, ir para o início do conteúdo">
           <img
             class="brand-logo"
             src="./imagens/logotipoLudus.png"
@@ -30,9 +30,7 @@
             width="262"
             height="80"
           >
-          <span class="brand-copy">
-            <strong>Ludus Equus</strong>
-          </span>
+         
         </a>
 
         <nav class="desktop-nav" aria-label="Primary">
@@ -155,7 +153,7 @@
     <section class="section" id="who">
       <div class="container story-panel reveal">
         <div class="story-grid">
-          <div class="story-copy">
+          <div class="story-copy reveal who-reveal">
             <div class="story-head">
               <p class="eyebrow" data-i18n="whoEyebrow">Quem somos</p>
               <h2 data-i18n="whoTitle">Uma presença equestre moldada pela experiência e por um atendimento pessoal</h2>
@@ -165,25 +163,25 @@
           </div>
 
           <div class="story-side">
-            <div class="stats-card">
-              <span class="stats-kicker" data-i18n="statsKicker">Experiência</span>
-              <strong>20</strong>
-              <span data-i18n="statsText">
+            <div class="stats-card reveal who-reveal">
+              <span class="stats-kicker" data-i18n="whoProof1Kicker">Experiência</span>
+              <strong data-i18n="whoProof1Value">20+</strong>
+              <span data-i18n="whoProof1Text">
                 anos ligados à atividade equestre, criação e cuidado com cavalos.
               </span>
             </div>
-            <div class="stats-card">
-              <span class="stats-kicker" data-i18n="statsKicker">Experiência</span>
-              <strong>20</strong>
-              <span data-i18n="statsText">
-                anos ligados à atividade equestre, criação e cuidado com cavalos.
+            <div class="stats-card reveal who-reveal">
+              <span class="stats-kicker" data-i18n="whoProof2Kicker">Formato</span>
+              <strong data-i18n="whoProof2Value">Privado</strong>
+              <span data-i18n="whoProof2Text">
+                Passeios serenos, com acompanhamento próximo e sem lógica de massa.
               </span>
             </div>
-            <div class="stats-card">
-              <span class="stats-kicker" data-i18n="statsKicker">Experiência</span>
-              <strong>20</strong>
-              <span data-i18n="statsText">
-                anos ligados à atividade equestre, criação e cuidado com cavalos.
+            <div class="stats-card reveal who-reveal">
+              <span class="stats-kicker" data-i18n="whoProof3Kicker">Coordenação</span>
+              <strong data-i18n="whoProof3Value">WhatsApp</strong>
+              <span data-i18n="whoProof3Text">
+                Reserva, detalhes e ponto de encontro tratados diretamente e sem ruído.
               </span>
             </div>
           </div>
@@ -334,7 +332,7 @@
 
             <figure class="gallery-card card-medium">
               <img
-                src="./imagens/Galeria/Desporto1.PNG"
+                src="./imagens/Galeria/Desporto1.JPG"
                 alt="Momento de desporto equestre com salto de obstáculos"
                 width="1200"
                 height="800"
@@ -437,41 +435,77 @@
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow" data-i18n="infoEyebrow">InformaÃ§Ãµes importantes</p>
-          <h2 data-i18n="infoTitle">CondiÃ§Ãµes essenciais resumidas em cartÃµes curtos.</h2>
+          <h2 data-i18n="infoTitle">CondiÃ§Ãµes essenciais em seleção rápida.</h2>
           <p data-i18n="infoText">
-            Os pontos principais ficam aqui para leitura rÃ¡pida, enquanto o rodapÃ© mantÃ©m acesso Ã 
-            pÃ¡gina com os termos completos.
+            Escolha um ponto para ver os detalhes, enquanto o rodapé mantém acesso à página com os
+            termos completos.
           </p>
         </div>
 
-        <div class="terms-grid reveal">
-          <article class="term-card">
-            <h3 data-i18n="term1Title">Contacto direto</h3>
-            <p data-i18n="term1Text">
-              Disponibilidade, ponto de encontro e confirmaÃ§Ã£o final devem ser tratados diretamente por WhatsApp.
-            </p>
-          </article>
+        <div class="terms-accordion reveal">
+          <details class="term-accordion" open>
+            <summary class="term-accordion-trigger">
+              <span class="term-accordion-copy">
+                <span class="term-accordion-title" data-i18n="term1Title">Contacto direto</span>
+              </span>
+              <span class="term-accordion-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="term-accordion-panel">
+              <div class="term-accordion-panel-inner">
+                <p data-i18n="term1Text">
+                  Disponibilidade, ponto de encontro e confirmaÃ§Ã£o final devem ser tratados diretamente por WhatsApp.
+                </p>
+              </div>
+            </div>
+          </details>
 
-          <article class="term-card">
-            <h3 data-i18n="term2Title">Formato privado</h3>
-            <p data-i18n="term2Text">
-              A experiência é comunicada de forma reservada e personalizada, sem linguagem de operação massificada.
-            </p>
-          </article>
+          <details class="term-accordion">
+            <summary class="term-accordion-trigger">
+              <span class="term-accordion-copy">
+                <span class="term-accordion-title" data-i18n="term2Title">Formato privado</span>
+              </span>
+              <span class="term-accordion-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="term-accordion-panel">
+              <div class="term-accordion-panel-inner">
+                <p data-i18n="term2Text">
+                  A experiência é comunicada de forma reservada e personalizada, sem linguagem de operação massificada.
+                </p>
+              </div>
+            </div>
+          </details>
 
-          <article class="term-card">
-            <h3 data-i18n="term3Title">Sem preços publicos</h3>
-            <p data-i18n="term3Text">
-              O site apresenta o tipo de experiência, mas nÃ£o publica valores na pÃ¡gina pÃºblica.
-            </p>
-          </article>
+          <details class="term-accordion">
+            <summary class="term-accordion-trigger">
+              <span class="term-accordion-copy">
+                <span class="term-accordion-title" data-i18n="term3Title">Sem preços públicos</span>
+              </span>
+              <span class="term-accordion-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="term-accordion-panel">
+              <div class="term-accordion-panel-inner">
+                <p data-i18n="term3Text">
+                  O site apresenta o tipo de experiência, mas não publica valores na página pública.
+                </p>
+              </div>
+            </div>
+          </details>
 
-          <article class="term-card">
-            <h3 data-i18n="term4Title">PT / EN</h3>
-            <p data-i18n="term4Text">
-              A estrutura está preparada para portugês e inglês, mantendo a mesma leitura calma e objetiva.
-            </p>
-          </article>
+          <details class="term-accordion">
+            <summary class="term-accordion-trigger">
+              <span class="term-accordion-copy">
+                <span class="term-accordion-title" data-i18n="term4Title">PT / EN</span>
+              </span>
+              <span class="term-accordion-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="term-accordion-panel">
+              <div class="term-accordion-panel-inner">
+                <p data-i18n="term4Text">
+                  A estrutura está preparada para portugês e inglês, mantendo a mesma leitura calma e objetiva.
+                </p>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -482,7 +516,7 @@
         <div class="cta-copy">
           <p class="eyebrow" data-i18n="contactEyebrow">Contacto</p>
           <h2 data-i18n="contactTitle">
-            Para um primeiro contacto simples e pessoal, o WhatsApp é o canal principal.
+            Para um primeiro contacto simples e pessoal, use o telefone, o email ou o WhatsApp.
           </h2>
           <p data-i18n="contactText">
             Este é o ponto certo para esclarecer dúvidas, pedir disponibilidade e alinhar uma
@@ -490,15 +524,26 @@
           </p>
         </div>
         <div class="cta-action">
-          <a
-            class="btn btn-primary btn-large"
-            href="https://wa.me/+351918241010"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-i18n="contactButton"
-          >
-            Abrir WhatsApp
-          </a>
+          <div class="cta-contacts" aria-label="Contact details">
+            <button class="cta-contact-link" type="button" data-copy-text="+351918241010">
+              <span class="cta-contact-label" data-i18n="contactPhoneLabel">Telefone</span>
+              <span class="cta-contact-value">+351 918 241 010</span>
+            </button>
+            <button class="cta-contact-link" type="button" data-copy-text="ludusequus@gmail.com">
+              <span class="cta-contact-label" data-i18n="contactEmailLabel">Email</span>
+              <span class="cta-contact-value">ludusequus@gmail.com</span>
+            </button>
+            <a
+              class="btn btn-primary btn-large"
+              href="https://wa.me/+351918241010"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n="contactButton"
+            >
+              Abrir WhatsApp
+            </a>
+            <p class="cta-copy-status" aria-live="polite" aria-atomic="true"></p>
+          </div>
         </div>
       </div>
     </section>
@@ -511,21 +556,21 @@
         <img
           class="footer-logo"
           src="./imagens/logotipoLudus.png"
-          alt="LogÃ³tipo Ludus Equus"
+          alt="Logotipo Ludus Equus"
           width="262"
           height="80"
         >
         <p data-i18n="footerText">
-          Website informativo para experiÃªncias equestres privadas e momentos de campo no Alqueva.
+          Website informativo para experiências equestres privadas e momentos de campo no Alqueva.
         </p>
       </div>
 
       <nav class="footer-links" aria-label="Footer">
         <a href="#who" data-i18n="navWho">Quem somos</a>
-        <a href="#experiences" data-i18n="navExperiences">ExperiÃªncias</a>
+        <a href="#experiences" data-i18n="navExperiences">Experiências</a>
         <a href="#gallery" data-i18n="navGallery">Galeria</a>
-        <a href="#location" data-i18n="navLocation">LocalizaÃ§Ã£o</a>
-        <a href="#info" data-i18n="navInfo">InformaÃ§Ãµes importantes</a>
+        <a href="#location" data-i18n="navLocation">Localização</a>
+        <a href="#info" data-i18n="navInfo">Informações importantes</a>
         <a href="./terms.html" data-i18n="fullTerms">Termos completos</a>
       </nav>
     </div>

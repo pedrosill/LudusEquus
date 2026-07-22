@@ -19,7 +19,7 @@
   <header class="site-header">
     <div class="container header-shell">
       <div class="header-inner">
-        <a class="brand" href="./ludus-equus.html" aria-label="Ludus Equus, voltar ao início">
+        <a class="brand" href="./index.html" aria-label="Ludus Equus, voltar ao início">
           <img
             class="brand-logo"
             src="./imagens/logotipoLudus.png"
@@ -38,7 +38,7 @@
             <button type="button" class="lang-btn is-active" data-lang-btn-terms="pt">PT</button>
             <button type="button" class="lang-btn" data-lang-btn-terms="en">EN</button>
           </div>
-          <a class="btn btn-secondary" href="./ludus-equus.html" data-i18n-terms="backHome">Voltar ao início</a>
+          <a class="btn btn-secondary" href="./index.html" data-i18n-terms="backHome">Voltar ao início</a>
         </div>
       </div>
     </div>
@@ -52,36 +52,79 @@
         <p data-i18n-terms="termsIntro">
           Esta página reúne o texto legal completo, condições operacionais e regras detalhadas de participação. A homepage mantém apenas os cartões-resumo.
         </p>
+        <ul class="terms-highlights" aria-label="Quick reference">
+          <li data-i18n-terms="termsPoint1">Contacto direto para confirmar disponibilidade e ponto de encontro.</li>
+          <li data-i18n-terms="termsPoint2">Formato privado com acompanhamento pessoal e regras claras.</li>
+          <li data-i18n-terms="termsPoint3">Sem preços públicos: os valores são alinhados de forma direta.</li>
+        </ul>
       </aside>
 
       <section class="terms-content">
-        <article class="legal-card">
-          <h2 data-i18n-terms="legal1Title">Reservas e confirmação</h2>
-          <p data-i18n-terms="legal1Text">
-            Reservas, disponibilidade, ponto de encontro e confirmação final devem ser sempre validados diretamente com a operação.
-          </p>
-        </article>
+        <div class="terms-accordion reveal">
+          <details class="term-accordion" open>
+            <summary class="term-accordion-trigger">
+              <span class="term-accordion-copy">
+                <span class="term-accordion-title" data-i18n-terms="legal1Title">Reservas e confirmação</span>
+              </span>
+              <span class="term-accordion-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="term-accordion-panel">
+              <div class="term-accordion-panel-inner">
+                <p data-i18n-terms="legal1Text">
+                  Reservas, disponibilidade, ponto de encontro e confirmação final devem ser sempre validados diretamente com a operação.
+                </p>
+              </div>
+            </div>
+          </details>
 
-        <article class="legal-card">
-          <h2 data-i18n-terms="legal2Title">Responsabilidades dos participantes</h2>
-          <p data-i18n-terms="legal2Text">
-            A participação depende do cumprimento das indicações dadas no local, das regras de segurança e das condições definidas para cada experiência.
-          </p>
-        </article>
+          <details class="term-accordion">
+            <summary class="term-accordion-trigger">
+              <span class="term-accordion-copy">
+                <span class="term-accordion-title" data-i18n-terms="legal2Title">Responsabilidades dos participantes</span>
+              </span>
+              <span class="term-accordion-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="term-accordion-panel">
+              <div class="term-accordion-panel-inner">
+                <p data-i18n-terms="legal2Text">
+                  A participação depende do cumprimento das indicações dadas no local, das regras de segurança e das condições definidas para cada experiência.
+                </p>
+              </div>
+            </div>
+          </details>
 
-        <article class="legal-card">
-          <h2 data-i18n-terms="legal3Title">Alterações operacionais</h2>
-          <p data-i18n-terms="legal3Text">
-            Condições meteorológicas, bem-estar animal, segurança ou questões logísticas podem exigir alterações de horário, percurso ou formato.
-          </p>
-        </article>
+          <details class="term-accordion">
+            <summary class="term-accordion-trigger">
+              <span class="term-accordion-copy">
+                <span class="term-accordion-title" data-i18n-terms="legal3Title">Alterações operacionais</span>
+              </span>
+              <span class="term-accordion-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="term-accordion-panel">
+              <div class="term-accordion-panel-inner">
+                <p data-i18n-terms="legal3Text">
+                  Condições meteorológicas, bem-estar animal, segurança ou questões logísticas podem exigir alterações de horário, percurso ou formato.
+                </p>
+              </div>
+            </div>
+          </details>
 
-        <article class="legal-card">
-          <h2 data-i18n-terms="legal4Title">Cancelamentos e reembolsos</h2>
-          <p data-i18n-terms="legal4Text">
-            A política final de cancelamento, alteração de data e eventual reembolso deve ser confirmada com o texto legal aprovado pelo cliente.
-          </p>
-        </article>
+          <details class="term-accordion">
+            <summary class="term-accordion-trigger">
+              <span class="term-accordion-copy">
+                <span class="term-accordion-title" data-i18n-terms="legal4Title">Cancelamentos e reembolsos</span>
+              </span>
+              <span class="term-accordion-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="term-accordion-panel">
+              <div class="term-accordion-panel-inner">
+                <p data-i18n-terms="legal4Text">
+                  A política final de cancelamento, alteração de data e eventual reembolso deve ser confirmada com o texto legal aprovado pelo cliente.
+                </p>
+              </div>
+            </div>
+          </details>
+        </div>
       </section>
     </div>
   </main>
