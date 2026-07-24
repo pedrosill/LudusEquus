@@ -36,6 +36,21 @@
       }
     });
 
+    document.querySelectorAll('[data-i18n-attr]').forEach((node) => {
+      const spec = node.getAttribute('data-i18n-attr');
+      if (!spec) return;
+
+      spec.split(';').forEach((entry) => {
+        const [attrName, key] = entry.split(':').map((part) => part.trim());
+        if (!attrName || !key) return;
+
+        const value = window.LUDUS_COPY[currentLang][key];
+        if (value) {
+          node.setAttribute(attrName, value);
+        }
+      });
+    });
+
     // Active language buttons
     document.querySelectorAll('[data-lang-btn], [data-lang-btn-terms]').forEach((button) => {
       const langValue =
@@ -260,6 +275,104 @@
         setCopyStatus(currentLang === 'pt' ? 'Não foi possível copiar.' : 'Could not copy.');
       }
     });
+  });
+
+  // ==========================
+  // Who modal
+  // ==========================
+  const whoModal = document.querySelector('[data-who-modal]');
+  const whoModalOpeners = document.querySelectorAll('[data-who-modal-open]');
+  const whoModalClosers = whoModal ? whoModal.querySelectorAll('[data-who-modal-close]') : [];
+  const whoModalCard = whoModal ? whoModal.querySelector('.who-modal-card') : null;
+  let whoModalHideTimer = null;
+  let lastWhoModalTrigger = null;
+
+  const closeWhoModal = () => {
+    if (!whoModal) return;
+
+    if (whoModalHideTimer) {
+      window.clearTimeout(whoModalHideTimer);
+      whoModalHideTimer = null;
+    }
+
+    whoModal.classList.remove('is-open');
+    document.body.classList.remove('modal-open');
+    whoModal.setAttribute('aria-hidden', 'true');
+
+    const returnFocus = lastWhoModalTrigger;
+    lastWhoModalTrigger = null;
+
+    if (reduceMotionQuery.matches) {
+      whoModal.hidden = true;
+      if (returnFocus && typeof returnFocus.focus === 'function') {
+        returnFocus.focus();
+      }
+      return;
+    }
+
+    whoModalHideTimer = window.setTimeout(() => {
+      if (!whoModal.classList.contains('is-open')) {
+        whoModal.hidden = true;
+      }
+
+      if (returnFocus && typeof returnFocus.focus === 'function') {
+        returnFocus.focus();
+      }
+
+      whoModalHideTimer = null;
+    }, 240);
+  };
+
+  const openWhoModal = (trigger) => {
+    if (!whoModal) return;
+
+    if (whoModalHideTimer) {
+      window.clearTimeout(whoModalHideTimer);
+      whoModalHideTimer = null;
+    }
+
+    lastWhoModalTrigger = trigger || null;
+    whoModal.hidden = false;
+    whoModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+
+    if (reduceMotionQuery.matches) {
+      whoModal.classList.add('is-open');
+      if (whoModalCard && typeof whoModalCard.focus === 'function') {
+        whoModalCard.focus();
+      }
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      whoModal.classList.add('is-open');
+      const closeButton = whoModal.querySelector('.who-modal-close');
+      if (closeButton && typeof closeButton.focus === 'function') {
+        closeButton.focus();
+      } else if (whoModalCard && typeof whoModalCard.focus === 'function') {
+        whoModalCard.focus();
+      }
+    });
+  };
+
+  whoModalOpeners.forEach((button) => {
+    button.addEventListener('click', () => openWhoModal(button));
+  });
+
+  whoModalClosers.forEach((button) => {
+    button.addEventListener('click', closeWhoModal);
+  });
+
+  if (whoModalCard) {
+    whoModalCard.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && whoModal && whoModal.classList.contains('is-open')) {
+      closeWhoModal();
+    }
   });
 
   // ==========================

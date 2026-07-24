@@ -39,6 +39,7 @@
           <a href="#gallery" data-i18n="navGallery">Galeria</a>
           <a href="#location" data-i18n="navLocation">Localização</a>
           <a href="#info" data-i18n="navInfo">Informações importantes</a>
+          <a href="#contact" data-i18n="navContact">Contactos</a>
         </nav>
 
         <div class="header-actions">
@@ -81,6 +82,7 @@
             <a href="#gallery" data-i18n="navGallery">Galeria</a>
             <a href="#location" data-i18n="navLocation">Localização</a>
             <a href="#info" data-i18n="navInfo">Informações importantes</a>
+            <a href="#contact" data-i18n="navContact">Contactos</a>
           </nav>
           <div class="mobile-menu-footer">
             <div class="lang-switch mobile-lang" aria-label="Language switcher mobile">
@@ -103,7 +105,7 @@
             <img src="./imagens/logotipoLudus.png" alt="" width="262" height="80">
           </div>
           <p class="eyebrow" data-i18n="heroEyebrow">Passeios Equestres  Alqueva  Hipismo</p>
-          <h1 data-i18n="heroTitle">Experiências a cavalo privadas.</h1>
+          <h1 data-i18n="heroTitle">Bem Vindos À Ludus Equus</h1>
           <p class="hero-text" data-i18n="heroText">
             A Ludus Equus apresenta passeios e momentos equestres com acompanhamento próximo,
             ritmo tranquilo e contacto direto por WhatsApp.
@@ -140,43 +142,103 @@
       </div>
     </section>
 
+    <!-- Scenic break -->
+    <section
+      class="scenic-break scenic-break-desktop"
+      aria-label="Passeio a cavalo junto à água ao pôr do sol"
+    >
+      <div class="scenic-scroll-cue" aria-hidden="true">
+        <span class="scenic-scroll-cue-icon scenic-scroll-cue-arrow"></span>
+      </div>
+    </section>
+
     <!-- Who -->
     <section class="section" id="who">
       <div class="container story-panel reveal">
-        <div class="story-grid">
-          <div class="story-copy reveal who-reveal">
-            <div class="story-head">
-              <p class="eyebrow" data-i18n="whoEyebrow">Quem somos</p>
-              <h2 data-i18n="whoTitle">Uma presença equestre moldada pela experiência e por um atendimento pessoal</h2>
-            </div>
-            <p data-i18n="whoText1">A Ludus Equus cruza uma longa ligação ao mundo do cavalo com uma proposta serena e privada, pensada para o Alqueva.</p>
-            <p data-i18n="whoText2">O tom é calmo, cuidado e direto, sem excesso de texto nem uma lógica de turismo massificado.</p>
-          </div>
+        <div class="section-head section-head-wide reveal">
+          <p class="eyebrow" data-i18n="whoEyebrow">Quem somos</p>
+          <h2 data-i18n="whoTitle">
+            Nasce em 2004, com o objetivo de ser uma empresa totalmente dedicada a Cavalos!
+          </h2>
+        </div>
 
-          <div class="story-side">
-            <div class="stats-card reveal who-reveal">
-              <span class="stats-kicker" data-i18n="whoProof1Kicker">Experiência</span>
-              <strong data-i18n="whoProof1Value">20+</strong>
-              <span data-i18n="whoProof1Text">
-                anos ligados à atividade equestre, criação e cuidado com cavalos.
-              </span>
-            </div>
-            <div class="stats-card reveal who-reveal">
-              <span class="stats-kicker" data-i18n="whoProof2Kicker">Formato</span>
-              <strong data-i18n="whoProof2Value">Privado</strong>
-              <span data-i18n="whoProof2Text">
-                Passeios serenos, com acompanhamento próximo e sem lógica de massa.
-              </span>
-            </div>
-            <div class="stats-card reveal who-reveal">
-              <span class="stats-kicker" data-i18n="whoProof3Kicker">Coordenação</span>
-              <strong data-i18n="whoProof3Value">WhatsApp</strong>
-              <span data-i18n="whoProof3Text">
-                Reserva, detalhes e ponto de encontro tratados diretamente e sem ruído.
-              </span>
-            </div>
+        <div class="story-copy reveal who-reveal">
+          <p data-i18n="whoText1">
+          Iniciamos a nossa história com a vertente desportiva na modalidade de Saltos de Obstáculos e com a criação de cavalos de desporto, para esta mesma modalidade.           </p>
+          <p data-i18n="whoText2">
+            Mais tarde, e porque sentimos que devíamos partilhar o que o Alentejo tem de melhor, alargamos para a valência do turismo equestre, aproveitando o melhor dos nossos cavalos, do Alentejo e da paisagem.
+          </p>
+          <div class="story-actions">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-who-modal-open
+              aria-haspopup="dialog"
+              aria-controls="who-modal"
+              data-i18n="whoButton"
+            >
+              Saber mais
+            </button>
           </div>
         </div>
+      </div>
+    </section>
+
+    <div class="who-modal" id="who-modal" data-who-modal hidden aria-hidden="true">
+      <div class="who-modal-backdrop" data-who-modal-close aria-hidden="true"></div>
+      <div
+        class="who-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="who-modal-title"
+        tabindex="-1"
+      >
+        <button
+          class="who-modal-close"
+          type="button"
+          data-who-modal-close
+          data-i18n="whoModalClose"
+          data-i18n-attr="aria-label:whoModalClose"
+        >
+          Fechar
+        </button>
+        <div class="who-modal-grid">
+          <div class="who-modal-copy">
+            <p class="eyebrow" data-i18n="whoModalEyebrow">Mais sobre nós</p>
+            <h3 id="who-modal-title" data-i18n="whoModalTitle">
+              Na Ludus Equus acreditamos que montar a cavalo é muito mais do que uma atividade.
+            </h3>
+            <p data-i18n="whoModalText1">
+              É uma forma de criar memórias, estabelecer uma ligação única com o cavalo e viver experiências verdadeiramente inesquecíveis.
+            </p>
+            <p data-i18n="whoModalText2">
+              Localizados junto ao maior lago artificial da Europa, proporcionamos passeios a cavalo que dão a conhecer a beleza da região, entre o montado, as vinhas e as margens do Alqueva.
+            </p>
+            <p class="who-modal-note" data-i18n="whoModalText3">
+              Se quiseres saber mais, o passo seguinte é simples: ver as experiências ou falar connosco diretamente por WhatsApp.
+            </p>
+          </div>
+          <figure class="who-modal-figure">
+            <img
+              src="./imagens/GenericHorses/internetHorse3.jpg"
+              alt=""
+              data-i18n-attr="alt:whoModalPhotoAlt"
+              width="1920"
+              height="1280"
+              loading="lazy"
+              decoding="async"
+            >
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <section
+      class="scenic-break scenic-break-mobile"
+      aria-label="Passeio a cavalo junto à água ao pôr do sol"
+    >
+      <div class="scenic-scroll-cue" aria-hidden="true">
+        <span class="scenic-scroll-cue-icon scenic-scroll-cue-arrow"></span>
       </div>
     </section>
 
@@ -323,17 +385,17 @@
     <section class="section section-soft" id="location">
       <div class="container location-panel reveal">
         <div class="location-copy">
-          <p class="eyebrow" data-i18n="locationEyebrow">LocalizaÃ§Ã£o</p>
+          <p class="eyebrow" data-i18n="locationEyebrow">Localização</p>
           <h2 data-i18n="locationTitle">
-            A experiÃªncia acontece no Alqueva, com ponto de encontro confirmado diretamente.
+            A experiência acontece no Alqueva, com ponto de encontro confirmado diretamente.
           </h2>
           <p data-i18n="locationText1">
-            A operaÃ§Ã£o decorre na zona do Alqueva, num contexto de campo e barragem pensado para
-            experiÃªncias privadas e ritmo tranquilo.
+            A operação decorre na zona do Alqueva, num contexto de campo e barragem pensado para
+            experiências privadas e ritmo tranquilo.
           </p>
           <p data-i18n="locationText2">
-            O ponto de encontro exato, acessos e orientaÃ§Ã£o final devem ser partilhados no momento
-            da confirmaÃ§Ã£o por WhatsApp.
+            O ponto de encontro exato, acessos e orientação final devem ser partilhados no momento
+            da confirmação por WhatsApp.
           </p>
           <div class="location-actions">
             <a
@@ -377,8 +439,8 @@
     <section class="section" id="info">
       <div class="container">
         <div class="section-head reveal">
-          <p class="eyebrow" data-i18n="infoEyebrow">InformaÃ§Ãµes importantes</p>
-          <h2 data-i18n="infoTitle">CondiÃ§Ãµes essenciais em seleção rápida.</h2>
+          <p class="eyebrow" data-i18n="infoEyebrow">Informações importantes</p>
+          <h2 data-i18n="infoTitle">Condições essenciais em seleção rápida.</h2>
           <p data-i18n="infoText">
             Escolha um ponto para ver os detalhes, enquanto o rodapé mantém acesso à página com os
             termos completos.
@@ -454,11 +516,11 @@
     </section>
 
     <!-- CTA -->
-    <section class="section cta-section">
+    <section class="section cta-section" id="contact" aria-labelledby="contact-title">
       <div class="container cta-panel reveal">
         <div class="cta-copy">
           <p class="eyebrow" data-i18n="contactEyebrow">Contacto</p>
-          <h2 data-i18n="contactTitle">
+          <h2 id="contact-title" data-i18n="contactTitle">
             Para um primeiro contacto simples e pessoal, use o telefone, o email ou o WhatsApp.
           </h2>
           <p data-i18n="contactText">
@@ -498,15 +560,20 @@
       <div class="footer-brand">
         <img
           class="footer-logo"
-          src="./imagens/logotipoLudus.png"
+          src="./imagens/logotipoLudus_footer.png"
           alt="Logotipo Ludus Equus"
           width="262"
           height="80"
         >
-        <p data-i18n="footerText">
-          Website informativo para experiências equestres privadas e momentos de campo no Alqueva.
-        </p>
       </div>
+
+      <div class="footer-copy">
+        <p>Ludus Equus &copy; 2026. Todos os direitos reservados.</p>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer">
+        <a href="./terms.html" data-i18n="fullTerms">Termos completos</a>
+      </nav>
 
       <div class="footer-social">
         <a
