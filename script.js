@@ -560,7 +560,7 @@
       for (const image of featureGalleryImages) {
         image.animate(
           {
-            objectPosition: `${100 + nextPercentage}% center`,
+            objectPosition: `${100 + nextPercentage}% `,
           },
           { duration: 1200, fill: 'forwards' }
         );

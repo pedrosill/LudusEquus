@@ -32,7 +32,7 @@ if (track) {
     for (const image of track.getElementsByClassName('image')) {
       image.animate(
         {
-          objectPosition: `${100 + nextPercentage}% center`,
+          objectPosition: `${100 + nextPercentage}% `,
         },
         { duration: 1200, fill: 'forwards' }
       );
