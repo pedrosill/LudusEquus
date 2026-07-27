@@ -226,7 +226,6 @@ button {
 
   .scenic-break {
     min-height: clamp(14rem, 52vw, 20rem);
-    background-attachment: scroll;
     background-position: center 42%;
   }
 
@@ -234,6 +233,10 @@ button {
     top: 0.8rem;
     width: 2rem;
     height: 2rem;
+  }
+
+  .scenic-break-mobile .scenic-scroll-cue {
+    display: none;
   }
 }
 
@@ -442,7 +445,7 @@ p {
   padding-inline: 1.6rem;
 }
 
-/* Hero & grids */
+/* Hero layout: desktop base styles */
 .hero {
   padding-top: 3.6rem;
 }
@@ -1698,15 +1701,18 @@ p {
 
   .hero {
     position: relative;
-    min-height: calc(var(--hero-vh, 1vh) * 100);
+    min-height: calc(100vh + var(--site-header-h, 4.15rem));
+    min-height: calc(100svh + var(--site-header-h, 4.15rem));
+    min-height: calc(100dvh + var(--site-header-h, 4.15rem));
     display: flex;
     align-items: flex-start;
-    padding-top: 0;
-    padding-bottom: 1.1rem;
+    margin-top: calc(var(--site-header-h, 4.15rem) * -1);
+    padding-top: var(--site-header-h, 4.15rem);
+    padding-bottom: 0;
     overflow: hidden;
     background:
       linear-gradient(180deg, rgba(28, 21, 15, 0.18) 0%, rgba(28, 21, 15, 0.34) 100%),
-      url("./imagens/Barragem1.jpeg") center 18% / cover no-repeat;
+      url("./imagens/Barragem1.jpeg") center 26% / cover no-repeat;
   }
 
   .hero::before {
@@ -1721,16 +1727,18 @@ p {
   .hero-grid {
     position: relative;
     z-index: 1;
-    min-height: calc((var(--hero-vh, 1vh) * 100) - 4.75rem);
-    align-content: start;
+    min-height: calc(100vh + 0.35rem);
+    min-height: calc(100svh + 0.35rem);
+    min-height: calc(100dvh + 0.35rem);
+    align-content: center;
     padding-top: 0;
-    padding-bottom: 0.35rem;
-    gap: 1rem;
+    padding-bottom: calc(var(--site-header-h, 4.15rem) * 0.35);
+    gap: 0;
   }
 
   .hero-copy {
     max-width: 100%;
-    padding: 0 0.6rem 0.25rem;
+    padding: 0.2rem 0.6rem 0.25rem;
     border: 0;
     border-radius: 0;
     background: transparent;
@@ -1738,69 +1746,46 @@ p {
     justify-items: center;
     text-align: center;
     gap: 0.95rem;
-  }
-
-  .hero-brand-mobile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: min(100%, 16rem);
-    margin-bottom: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    backdrop-filter: none;
-  }
-
-  .hero-brand-mobile img {
-    width: 100%;
-    height: auto;
+    color: #fff7ef;
+    text-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   }
 
   .hero-copy .eyebrow,
-  .hero-copy h1,
   .hero-copy .hero-text {
-    color: #fff7ef;
+    color: rgba(255, 247, 239, 0.94);
   }
 
   .hero-copy .eyebrow {
-    color: rgba(255, 231, 205, 0.92);
+    color: var(--color-accent);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
   }
 
   .hero-copy h1 {
-    max-width: none;
-    margin-top: 0;
-    font-size: clamp(2.45rem, 5.4vw, 3.5rem);
-    line-height: 0.96;
-    text-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+    margin-bottom: 0.35rem;
+    color: transparent;
+    background: linear-gradient(180deg, #ffffff 0%, #f3eadf 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
   }
 
   .hero-copy .hero-text {
-    display: none;
+    margin-top: 0.15rem;
+    text-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
   }
 
   .hero-actions .btn {
-    background: rgba(255, 248, 240, 0.92);
+    color: #fff7ef;
+  }
+
+  .hero-actions .btn-primary {
     color: var(--color-text);
-    border-color: rgba(255, 248, 240, 0.15);
+    background: rgba(255, 247, 239, 0.88);
+    border-color: rgba(255, 247, 239, 0.18);
   }
 
   .hero-actions .btn-secondary {
-    background: rgba(255, 248, 240, 0.14);
-    color: #fff7ef;
-    border-color: rgba(255, 248, 240, 0.28);
-  }
-
-  .hero-actions {
-    width: 100%;
-    max-width: 24rem;
-    margin-top: 0.1rem;
-    gap: 0.75rem;
-  }
-
-  .hero-actions .btn {
-    min-height: 3.15rem;
+    background: rgba(255, 247, 239, 0.08);
+    border-color: rgba(255, 247, 239, 0.24);
   }
 
   .hero-visual {
@@ -1966,7 +1951,6 @@ p {
     z-index: 100;
     display: block;
     margin-bottom: 0;
-    padding-top: 0.35rem;
     pointer-events: none;
   }
 
@@ -2137,18 +2121,21 @@ p {
     flex-wrap: wrap;
   }
 
+  /* Mobile hero override: full-screen landing with background photo */
   .hero {
     position: relative;
-    min-height: 100svh;
+    min-height: calc(100vh + var(--site-header-h, 3.65rem));
+    min-height: calc(100svh + var(--site-header-h, 3.65rem));
+    min-height: calc(100dvh + var(--site-header-h, 3.65rem));
     display: flex;
     align-items: flex-start;
-    margin-top: -0.7rem;
-    padding-top: 0;
-    padding-bottom: 1rem;
+    margin-top: calc(var(--site-header-h, 3.65rem) * -1);
+    padding-top: var(--site-header-h, 3.65rem);
+    padding-bottom: 0;
     overflow: hidden;
     background:
-      linear-gradient(180deg, rgba(28, 21, 15, 0.18) 0%, rgba(28, 21, 15, 0.34) 100%),
-      url("./imagens/Barragem1.jpeg") center center / cover no-repeat;
+      linear-gradient(180deg, rgba(28, 21, 15, 0.16) 0%, rgba(28, 21, 15, 0.34) 100%),
+      url("./imagens/Barragem1.jpeg") center 34% / cover no-repeat;
   }
 
   .hero::before {
@@ -2163,16 +2150,18 @@ p {
   .hero-grid {
     position: relative;
     z-index: 1;
-    min-height: calc(100svh - 4rem);
-    align-content: start;
-    padding-top: 1rem;
-    padding-bottom: 0.35rem;
-    gap: 0.9rem;
+    min-height: calc(100vh + 0.35rem);
+    min-height: calc(100svh + 0.35rem);
+    min-height: calc(100dvh + 0.35rem);
+    align-content: center;
+    padding-top: 0;
+    padding-bottom: calc(var(--site-header-h, 3.65rem) * 0.35);
+    gap: 0;
   }
 
   .hero-copy {
     max-width: 100%;
-    padding: 0 0.45rem 0.15rem;
+    padding: 0.2rem 0.45rem 0.15rem;
     border: 0;
     border-radius: 0;
     background: transparent;
@@ -2180,69 +2169,46 @@ p {
     justify-items: center;
     text-align: center;
     gap: 0.9rem;
-  }
-
-  .hero-brand-mobile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: min(100%, 14.75rem);
-    margin-bottom: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    backdrop-filter: none;
-  }
-
-  .hero-brand-mobile img {
-    width: 100%;
-    height: auto;
+    color: #fff7ef;
+    text-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   }
 
   .hero-copy .eyebrow,
-  .hero-copy h1,
   .hero-copy .hero-text {
-    color: #fff7ef;
+    color: rgba(255, 247, 239, 0.94);
   }
 
   .hero-copy .eyebrow {
-    color: rgba(255, 231, 205, 0.92);
+    color: var(--color-accent);
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
   }
 
   .hero-copy h1 {
-    max-width: none;
-    margin-top: 0;
-    font-size: clamp(2.2rem, 9.6vw, 3.15rem);
-    line-height: 0.97;
-    text-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+    margin-bottom: 0.35rem;
+    color: transparent;
+    background: linear-gradient(180deg, #ffffff 0%, #f3eadf 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
   }
 
   .hero-copy .hero-text {
-    display: none;
+    margin-top: 0.15rem;
+    text-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
   }
 
   .hero-actions .btn {
-    background: rgba(255, 248, 240, 0.92);
+    color: #fff7ef;
+  }
+
+  .hero-actions .btn-primary {
     color: var(--color-text);
-    border-color: rgba(255, 248, 240, 0.15);
+    background: rgba(255, 247, 239, 0.88);
+    border-color: rgba(255, 247, 239, 0.18);
   }
 
   .hero-actions .btn-secondary {
-    background: rgba(255, 248, 240, 0.14);
-    color: #fff7ef;
-    border-color: rgba(255, 248, 240, 0.28);
-  }
-
-  .hero-actions {
-    width: 100%;
-    max-width: 19rem;
-    margin-top: 0.1rem;
-    gap: 0.7rem;
-  }
-
-  .hero-actions .btn {
-    min-height: 3.1rem;
+    background: rgba(255, 247, 239, 0.08);
+    border-color: rgba(255, 247, 239, 0.24);
   }
 
   .hero-visual {
@@ -2375,11 +2341,6 @@ p {
     line-height: 1.72;
   }
 
-  .story-copy,
-  .hero-copy {
-    gap: 1.05rem;
-  }
-
   .terms-page {
     padding-top: 1rem;
   }
@@ -2420,27 +2381,9 @@ p {
     gap: 0.7rem;
   }
 
-  .hero-copy {
-    padding: 0 0.5rem 0.3rem;
-  }
-
-  .hero-brand-mobile {
-    width: min(100%, 14.5rem);
-  }
-
-  .hero-copy h1 {
-    max-width: none;
-    font-size: clamp(2.25rem, 10vw, 3.15rem);
-    line-height: 0.98;
-  }
-
-  .hero-copy .eyebrow {
-    line-height: 1.45;
-  }
-
   .hero-actions {
     max-width: 19rem;
-    gap: 0.65rem;
+    gap: 1rem;
   }
 
   .mobile-menu-inner {
