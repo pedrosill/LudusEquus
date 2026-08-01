@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./cardAnimationsTest.css">
+  <link rel="stylesheet" href="./cardAnimationsTest.css?v=premium-modal-v4">
 </head>
 <body>
   <main class="test-page">
@@ -22,22 +22,37 @@
         <div class="card-modal-layer" data-card-modal-layer aria-hidden="true"></div>
 
         <!-- Copied experiences cards section for isolated animation testing -->
+        <div class="carousel-indicator" data-carousel-indicator role="group" aria-label="Experience position">
+          <button class="carousel-dot" type="button" data-carousel-dot="0" aria-label="Show experience 1" aria-current="true"></button>
+          <button class="carousel-dot" type="button" data-carousel-dot="1" aria-label="Show experience 2"></button>
+          <button class="carousel-dot" type="button" data-carousel-dot="2" aria-label="Show experience 3"></button>
+        </div>
         <div class="experiences-grid" data-card-test-grid>
           <article class="info-card experience-card" data-card-test-item>
             <button class="experience-close" type="button" aria-label="Close card" data-card-close>×</button>
+            <div class="experience-gallery">
             <figure class="image-card experience-image">
-              <img src="../imagens/Barragem_square.jpeg" alt="Passeio a cavalo junto à água ao pôr do sol" width="1200" height="1200" loading="eager" decoding="async">
+              <img src="../imagens/Barragem1.jpeg" alt="Passeio a cavalo junto à água ao pôr do sol" width="1600" height="900" loading="eager" decoding="async">
             </figure>
+            <div class="experience-thumbnails" data-thumbnails></div>
+            </div>
             <div class="experience-content">
               <div class="experience-copy">
                 <h2>Passeio a Cavalo na Água</h2>
                 <p class="experience-summary">Descubra uma experiência única nas margens da Barragem do Alqueva.</p>
+                <div class="experience-meta" aria-label="Experience information">
+                  <span class="experience-meta-item"><strong>2h</strong><small>Duration</small></span>
+                  <span class="experience-meta-item"><strong>Easy</strong><small>Difficulty</small></span>
+                  <span class="experience-meta-item"><strong>Up to 6</strong><small>Group size</small></span>
+                  <span class="experience-meta-item"><strong>PT / EN</strong><small>Languages</small></span>
+                </div>
                 <p class="experience-note">Um passeio pensado para sentir a água, o silêncio e a luz do fim do dia.</p>
                 <button class="experience-trigger" type="button" data-card-open>Learn More</button>
               </div>
               <div class="experience-details" aria-hidden="true">
                 <p>Neste passeio, terá a oportunidade de andar e nadar a cavalo, desfrutando de momentos mágicos em plena natureza. Para terminar, delicie-se com um agradável Pic-Nic, ideal para relaxar e saborear os produtos da região enquanto aprecia o magnífico pôr do sol sobre o Alqueva.</p>
                 <div class="experience-actions">
+                  <span class="experience-price"><small>Pricing</small><strong>Available upon request</strong></span>
                   <a class="experience-booking" href="https://wa.me/+351918241010" target="_blank" rel="noopener noreferrer">Book this ride</a>
                 </div>
               </div>
@@ -46,19 +61,29 @@
 
           <article class="info-card experience-card" data-card-test-item>
             <button class="experience-close" type="button" aria-label="Close card" data-card-close>×</button>
-            <figure class="image-card experience-image">
-              <img src="../imagens/passeio1_square.JPG" alt="Passeio a cavalo no campo" width="1200" height="1200" loading="lazy" decoding="async">
-            </figure>
+            <div class="experience-gallery">
+              <figure class="image-card experience-image">
+                <img src="../imagens/passeio1.JPG" alt="Passeio a cavalo no campo" width="1600" height="900" loading="lazy" decoding="async">
+              </figure>
+              <div class="experience-thumbnails" data-thumbnails></div>
+            </div>
             <div class="experience-content">
               <div class="experience-copy">
                 <h2>Passeio a Cavalo pelo Campo</h2>
                 <p class="experience-summary">Explore a beleza da paisagem alentejana num tranquilo passeio entre vinhas e montado.</p>
+                <div class="experience-meta" aria-label="Experience information">
+                  <span class="experience-meta-item"><strong>1h30</strong><small>Duration</small></span>
+                  <span class="experience-meta-item"><strong>Easy</strong><small>Difficulty</small></span>
+                  <span class="experience-meta-item"><strong>Up to 8</strong><small>Group size</small></span>
+                  <span class="experience-meta-item"><strong>PT / EN</strong><small>Languages</small></span>
+                </div>
                 <p class="experience-note">Uma experiência serena para quem procura ritmo calmo e paisagem aberta.</p>
                 <button class="experience-trigger" type="button" data-card-open>Learn More</button>
               </div>
               <div class="experience-details" aria-hidden="true">
                 <p>Desfrute da serenidade da natureza, da vista deslumbrante e da autenticidade do Alentejo, numa experiência perfeita para relaxar e criar memórias inesquecíveis.</p>
                 <div class="experience-actions">
+                  <span class="experience-price"><small>Pricing</small><strong>Available upon request</strong></span>
                   <a class="experience-booking" href="https://wa.me/+351918241010" target="_blank" rel="noopener noreferrer">Book this ride</a>
                 </div>
               </div>
@@ -67,25 +92,41 @@
 
           <article class="info-card experience-card" data-card-test-item>
             <button class="experience-close" type="button" aria-label="Close card" data-card-close>×</button>
-            <figure class="image-card experience-image">
-              <img src="../imagens/pirquenique3.png" alt="Piquenique junto à água com manta e cesta" width="1200" height="1200" loading="lazy" decoding="async">
-            </figure>
+            <div class="experience-gallery">
+              <figure class="image-card experience-image">
+                <img src="../imagens/Piquenique.jpeg" alt="Piquenique junto à água com manta e cesta" width="1600" height="900" loading="lazy" decoding="async">
+              </figure>
+              <div class="experience-thumbnails" data-thumbnails></div>
+            </div>
             <div class="experience-content">
               <div class="experience-copy">
                 <h2>Passeios personalizados</h2>
                 <p class="experience-summary">Passeios a cavalo à medida de cada ocasião.</p>
+                <div class="experience-meta" aria-label="Experience information">
+                  <span class="experience-meta-item"><strong>Flexible</strong><small>Duration</small></span>
+                  <span class="experience-meta-item"><strong>Tailored</strong><small>Format</small></span>
+                  <span class="experience-meta-item"><strong>Groups</strong><small>Best for</small></span>
+                  <span class="experience-meta-item"><strong>By request</strong><small>Availability</small></span>
+                </div>
                 <p class="experience-note">Uma proposta flexível para grupos, sessões especiais e momentos a celebrar.</p>
                 <button class="experience-trigger" type="button" data-card-open>Learn More</button>
               </div>
               <div class="experience-details" aria-hidden="true">
                 <p>Seja para um team building, um pedido de casamento, uma despedida de solteiro(a), uma sessão fotográfica ou qualquer momento especial, desenvolvemos experiências personalizadas que combinam a beleza da paisagem alentejana com a autenticidade do mundo equestre.</p>
                 <div class="experience-actions">
+                  <span class="experience-price"><small>Pricing</small><strong>Available upon request</strong></span>
                   <a class="experience-booking" href="https://wa.me/+351918241010" target="_blank" rel="noopener noreferrer">Book this ride</a>
                 </div>
               </div>
             </div>
           </article>
         </div>
+        <div class="carousel-edge-hint" data-carousel-edge-hint aria-hidden="true"></div>
+        <p class="carousel-hint">
+          <span class="carousel-hint-line" aria-hidden="true"></span>
+          Swipe to explore
+          <span class="carousel-hint-line" aria-hidden="true"></span>
+        </p>
       </div>
     </section>
   </main>

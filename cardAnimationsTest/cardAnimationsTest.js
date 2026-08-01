@@ -2,7 +2,11 @@ const shell = document.querySelector('.test-shell');
 const grid = document.querySelector('[data-card-test-grid]');
 const dimmer = document.querySelector('[data-card-dimmer]');
 const modalLayer = document.querySelector('[data-card-modal-layer]');
+const carouselDots = Array.from(document.querySelectorAll('[data-carousel-dot]'));
+const carouselEdgeHint = document.querySelector('[data-carousel-edge-hint]');
 const cards = Array.from(document.querySelectorAll('[data-card-test-item]'));
+const originalMainImages = new WeakMap();
+const mobileBookingOrigins = new Map();
 const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 const root = document.documentElement;
 const focusableSelector =
@@ -12,6 +16,7 @@ let activeCard = null;
 let openTimer = null;
 let lastTrigger = null;
 let viewportRaf = 0;
+let compactResizeTimer = 0;
 const cardOrigins = new Map();
 
 const syncViewportMetrics = () => {
@@ -24,14 +29,171 @@ const scheduleViewportMetricsSync = () => {
   viewportRaf = window.requestAnimationFrame(() => {
     viewportRaf = 0;
     syncViewportMetrics();
+    syncCompactLayout();
+    syncMobileCarousel();
+    syncMobileBookingAction();
     reflowActiveCard();
   });
 };
 
-const getFocusableElements = (container) =>
-  Array.from(container.querySelectorAll(focusableSelector)).filter(
+const syncCompactLayout = () => {
+  cards.forEach((card) => {
+    card.classList.toggle('compact-layout', card === activeCard && window.innerHeight < 760);
+  });
+};
+
+const syncMobileCarousel = () => {
+  if (!grid) return;
+
+  const isMobile = window.matchMedia('(max-width: 1199px)').matches;
+  const gridCards = cards.filter((card) => card.parentElement === grid);
+
+  if (!isMobile || !gridCards.length) {
+    grid.classList.remove('is-carousel-hinting');
+    carouselEdgeHint?.classList.remove('is-visible');
+    carouselEdgeHint?.classList.remove('is-second-hint');
+    cards.forEach((card) => {
+      card.classList.remove('is-carousel-current', 'is-carousel-previous', 'is-carousel-next');
+    });
+    carouselDots.forEach((dot) => dot.setAttribute('aria-current', 'false'));
+    return;
+  }
+
+  const gridCenter = grid.scrollLeft + grid.clientWidth / 2;
+  const currentIndex = gridCards.reduce((closestIndex, card, index) => {
+    const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+    const closestCard = gridCards[closestIndex];
+    const closestCenter = closestCard.offsetLeft + closestCard.offsetWidth / 2;
+
+    return Math.abs(cardCenter - gridCenter) < Math.abs(closestCenter - gridCenter)
+      ? index
+      : closestIndex;
+  }, 0);
+
+  syncCarouselEdgeHintPosition(gridCards[currentIndex]);
+
+  if (carouselSectionHasEntered) {
+    syncCarouselHint(currentIndex, gridCards);
+  }
+
+  cards.forEach((card) => {
+    const index = gridCards.indexOf(card);
+    card.classList.toggle('is-carousel-current', index === currentIndex);
+    card.classList.toggle('is-carousel-previous', index === currentIndex - 1);
+    card.classList.toggle('is-carousel-next', index === currentIndex + 1);
+  });
+
+  carouselDots.forEach((dot, index) => {
+    dot.setAttribute('aria-current', index === currentIndex ? 'true' : 'false');
+  });
+};
+
+const syncCarouselEdgeHintPosition = (activeCardForHint) => {
+  if (!grid || !carouselEdgeHint) return;
+
+  const section = grid.closest('.test-section');
+  const targetRect = (activeCardForHint || grid).getBoundingClientRect();
+  const sectionRect = section?.getBoundingClientRect();
+
+  if (!sectionRect) return;
+
+  carouselEdgeHint.style.top = `${targetRect.top + targetRect.height / 2 - sectionRect.top - 10}px`;
+};
+
+let mobileCarouselRaf = 0;
+let carouselSectionHasEntered = false;
+let activeCarouselHintIndex = null;
+const carouselHintsShown = new Set();
+
+const scheduleMobileCarouselSync = () => {
+  if (mobileCarouselRaf) return;
+
+  mobileCarouselRaf = window.requestAnimationFrame(() => {
+    mobileCarouselRaf = 0;
+    syncMobileCarousel();
+  });
+};
+
+const syncCarouselHint = (currentIndex, gridCards) => {
+  if (!grid || !gridCards[currentIndex + 1]) {
+    grid.classList.remove('is-carousel-hinting');
+    carouselEdgeHint?.classList.remove('is-visible');
+    carouselEdgeHint?.classList.remove('is-second-hint');
+    activeCarouselHintIndex = null;
+    return;
+  }
+
+  if (carouselHintsShown.has(currentIndex)) {
+    if (activeCarouselHintIndex !== currentIndex) {
+      grid.classList.remove('is-carousel-hinting');
+      carouselEdgeHint?.classList.remove('is-visible');
+      carouselEdgeHint?.classList.remove('is-second-hint');
+      activeCarouselHintIndex = null;
+    }
+    return;
+  }
+
+  carouselHintsShown.add(currentIndex);
+  activeCarouselHintIndex = currentIndex;
+  grid.classList.remove('is-carousel-hinting');
+  carouselEdgeHint?.classList.remove('is-visible');
+  carouselEdgeHint?.classList.toggle('is-second-hint', currentIndex === 1);
+  window.requestAnimationFrame(() => {
+    if (activeCarouselHintIndex === currentIndex) {
+      carouselEdgeHint?.classList.add('is-visible');
+    }
+  });
+};
+
+const syncMobileBookingAction = () => {
+  if (!activeCard || !modalLayer) return;
+
+  const actions =
+    activeCard.querySelector('.experience-actions') ||
+    mobileBookingOrigins.get(activeCard)?.actions;
+  const isMobile = window.matchMedia('(max-width: 759px)').matches;
+
+  if (!actions) return;
+
+  if (isMobile && actions.parentElement !== modalLayer) {
+    mobileBookingOrigins.set(activeCard, {
+      parent: actions.parentElement,
+      nextSibling: actions.nextSibling,
+      actions,
+    });
+    actions.classList.add('is-mobile-booking');
+    modalLayer.appendChild(actions);
+  }
+
+  if (isMobile && actions.parentElement === modalLayer) {
+    const cardRect = activeCard.getBoundingClientRect();
+    actions.style.setProperty('--mobile-booking-top', `${cardRect.bottom + 12}px`);
+    return;
+  }
+
+  if (!isMobile && actions.parentElement === modalLayer) {
+    restoreMobileBookingAction(activeCard);
+  }
+};
+
+const scheduleCompactLayoutSync = () => {
+  window.clearTimeout(compactResizeTimer);
+  compactResizeTimer = window.setTimeout(syncCompactLayout, 120);
+};
+
+const getFocusableElements = (container) => {
+  const focusables = Array.from(container.querySelectorAll(focusableSelector));
+  const externalBooking =
+    container === activeCard ? modalLayer?.querySelector('.is-mobile-booking') : null;
+
+  if (externalBooking) {
+    focusables.push(...externalBooking.querySelectorAll(focusableSelector));
+  }
+
+  return [...new Set(focusables)].filter(
     (element) => !element.hasAttribute('disabled') && element.getClientRects().length > 0
   );
+};
 
 const clearOpenTimer = () => {
   if (openTimer) {
@@ -41,6 +203,10 @@ const clearOpenTimer = () => {
 };
 
 const setDimmerVisible = (visible) => {
+  if (modalLayer) {
+    modalLayer.setAttribute('aria-hidden', visible ? 'false' : 'true');
+  }
+
   if (!dimmer) return;
 
   dimmer.hidden = !visible;
@@ -63,7 +229,10 @@ const clampCardTop = (top, height) => {
 const clampCardHeight = (height) => {
   const viewportHeight = window.innerHeight;
   const margin = 16;
-  return Math.max(240, Math.min(height, viewportHeight - margin * 2));
+  const availableHeight = Math.max(0, viewportHeight - margin * 2);
+  const minimumHeight = Math.min(180, availableHeight);
+
+  return Math.min(Math.max(height, minimumHeight), availableHeight);
 };
 
 const getModalMetrics = (rect) => {
@@ -105,6 +274,7 @@ const moveCardToModal = (card) => {
   cardOrigins.set(card, {
     parent: card.parentElement,
     nextSibling: card.nextSibling,
+    placeholder: null,
     rect: {
       top: rect.top,
       left: rect.left,
@@ -113,6 +283,21 @@ const moveCardToModal = (card) => {
       height: rect.height,
     },
   });
+
+  const placeholder = document.createElement('div');
+  const computedStyle = window.getComputedStyle(card);
+
+  placeholder.className = 'experience-card-placeholder';
+  placeholder.setAttribute('aria-hidden', 'true');
+  placeholder.style.height = `${rect.height}px`;
+  placeholder.style.minHeight = `${rect.height}px`;
+  placeholder.style.gridColumn = computedStyle.gridColumn;
+  placeholder.style.gridRow = computedStyle.gridRow;
+  placeholder.style.borderRadius = computedStyle.borderRadius;
+  placeholder.style.transition = 'height 320ms var(--ease)';
+
+  card.before(placeholder);
+  cardOrigins.get(card).placeholder = placeholder;
   applyModalGeometry(card, rect);
   modalLayer.appendChild(card);
   card.classList.add('is-modal');
@@ -125,6 +310,18 @@ const reflowActiveCard = () => {
 
   if (!origin?.rect) return;
 
+  const placeholderRect = origin.placeholder?.getBoundingClientRect();
+
+  if (placeholderRect) {
+    origin.rect = {
+      ...origin.rect,
+      top: placeholderRect.top,
+      left: placeholderRect.left,
+      right: placeholderRect.right,
+      width: placeholderRect.width,
+    };
+  }
+
   applyModalGeometry(activeCard, origin.rect);
 };
 
@@ -133,7 +330,10 @@ const restoreCardFromModal = (card) => {
 
   if (!origin?.parent) return;
 
-  if (origin.nextSibling && origin.nextSibling.parentNode === origin.parent) {
+  if (origin.placeholder?.parentNode === origin.parent) {
+    origin.parent.insertBefore(card, origin.placeholder);
+    origin.placeholder.remove();
+  } else if (origin.nextSibling && origin.nextSibling.parentNode === origin.parent) {
     origin.parent.insertBefore(card, origin.nextSibling);
   } else {
     origin.parent.appendChild(card);
@@ -152,11 +352,29 @@ const restoreCardFromModal = (card) => {
   cardOrigins.delete(card);
 };
 
+const restoreMobileBookingAction = (card) => {
+  const origin = mobileBookingOrigins.get(card);
+  const actions = card?.querySelector('.experience-actions') || origin?.actions;
+
+  if (!actions || !origin?.parent) return;
+
+  if (origin.nextSibling?.parentNode === origin.parent) {
+    origin.parent.insertBefore(actions, origin.nextSibling);
+  } else {
+    origin.parent.appendChild(actions);
+  }
+
+  actions.classList.remove('is-mobile-booking');
+  actions.style.removeProperty('--mobile-booking-top');
+  mobileBookingOrigins.delete(card);
+};
+
 cards.forEach((card, index) => {
   const title = card.querySelector('.experience-copy h2');
   const summary = card.querySelector('.experience-summary');
   const details = card.querySelector('.experience-details');
   const trigger = card.querySelector('[data-card-open]');
+  const closeButton = card.querySelector('[data-card-close]');
   const baseId = `experience-card-${index + 1}`;
 
   if (title && !title.id) {
@@ -176,6 +394,49 @@ cards.forEach((card, index) => {
     trigger.setAttribute('aria-expanded', 'false');
     trigger.setAttribute('aria-controls', details?.id || `${baseId}-details`);
   }
+
+  if (closeButton) {
+    closeButton.setAttribute('aria-hidden', 'true');
+    closeButton.tabIndex = -1;
+  }
+
+  const mainImage = card.querySelector('.experience-image img');
+  const thumbnails = card.querySelector('[data-thumbnails]');
+
+  if (mainImage && thumbnails) {
+    originalMainImages.set(card, mainImage.currentSrc || mainImage.src);
+
+    const sources = [
+      mainImage.currentSrc || mainImage.src,
+      ...cards
+        .map((candidate) => candidate.querySelector('.experience-image img'))
+        .filter(Boolean)
+        .map((image) => image.currentSrc || image.src),
+    ].slice(0, 4);
+
+    sources.forEach((source, thumbnailIndex) => {
+      const button = document.createElement('button');
+      const image = document.createElement('img');
+
+      button.className = 'experience-thumb';
+      if (thumbnailIndex === 0) {
+        button.classList.add('is-active');
+      }
+      button.type = 'button';
+      button.setAttribute('aria-label', `View image ${thumbnailIndex + 1}`);
+      image.src = source;
+      image.alt = '';
+      image.loading = 'lazy';
+      button.appendChild(image);
+      button.addEventListener('click', () => {
+        mainImage.src = source;
+        thumbnails.querySelectorAll('.experience-thumb').forEach((thumbnail) => {
+          thumbnail.classList.toggle('is-active', thumbnail === button);
+        });
+      });
+      thumbnails.appendChild(button);
+    });
+  }
 });
 
 const syncCardStates = () => {
@@ -183,6 +444,7 @@ const syncCardStates = () => {
     const title = card.querySelector('.experience-copy h2');
     const details = card.querySelector('.experience-details');
     const trigger = card.querySelector('[data-card-open]');
+    const closeButton = card.querySelector('[data-card-close]');
     const isActive = card === activeCard;
     const titleId = title?.id;
     const detailsId = details?.id;
@@ -222,7 +484,12 @@ const syncCardStates = () => {
 
     if (trigger) {
       trigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-      trigger.textContent = isActive ? 'Less Info' : 'Learn More';
+      trigger.textContent = 'Learn More';
+    }
+
+    if (closeButton) {
+      closeButton.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      closeButton.tabIndex = isActive ? 0 : -1;
     }
   });
 };
@@ -238,6 +505,20 @@ const focusActiveCard = () => {
   }
 };
 
+const restoreOriginalMainImage = (card) => {
+  const mainImage = card?.querySelector('.experience-image img');
+  const thumbnails = card?.querySelector('[data-thumbnails]');
+  const originalSource = originalMainImages.get(card);
+
+  if (mainImage && originalSource) {
+    mainImage.src = originalSource;
+  }
+
+  thumbnails?.querySelectorAll('.experience-thumb').forEach((thumbnail, index) => {
+    thumbnail.classList.toggle('is-active', index === 0);
+  });
+};
+
 const closeCard = () => {
   if (!activeCard) return;
 
@@ -246,9 +527,12 @@ const closeCard = () => {
   setShellDimmed(false);
 
   const triggerToRestore = lastTrigger;
+  restoreOriginalMainImage(activeCard);
+  restoreMobileBookingAction(activeCard);
   restoreCardFromModal(activeCard);
   activeCard = null;
   syncCardStates();
+  syncMobileCarousel();
   lastTrigger = null;
 
   if (triggerToRestore && typeof triggerToRestore.focus === 'function') {
@@ -263,6 +547,8 @@ const openCard = (card, trigger) => {
   lastTrigger = trigger || null;
 
   if (activeCard && activeCard !== card) {
+    restoreOriginalMainImage(activeCard);
+    restoreMobileBookingAction(activeCard);
     restoreCardFromModal(activeCard);
     activeCard.classList.remove('is-expanded');
     activeCard.classList.remove('is-opening');
@@ -270,6 +556,9 @@ const openCard = (card, trigger) => {
 
   moveCardToModal(card);
   activeCard = card;
+  syncCompactLayout();
+  syncMobileCarousel();
+  syncMobileBookingAction();
   setShellDimmed(true);
   setDimmerVisible(true);
   syncCardStates();
@@ -283,6 +572,7 @@ const openCard = (card, trigger) => {
     card.classList.add('is-opening');
     requestAnimationFrame(() => {
       card.classList.add('is-expanded');
+      syncMobileBookingAction();
       focusActiveCard();
       openTimer = window.setTimeout(() => {
         card.classList.remove('is-opening');
@@ -351,11 +641,53 @@ window.addEventListener('keydown', (event) => {
 });
 
 syncViewportMetrics();
+syncMobileCarousel();
+window.addEventListener('load', syncMobileCarousel);
 window.addEventListener('resize', scheduleViewportMetricsSync);
+window.addEventListener('resize', scheduleCompactLayoutSync);
 window.addEventListener('orientationchange', () => {
   syncViewportMetrics();
+  syncCompactLayout();
+  syncMobileCarousel();
   reflowActiveCard();
 });
+
+grid?.addEventListener('scroll', scheduleMobileCarouselSync, { passive: true });
+
+carouselDots.forEach((dot) => {
+  dot.addEventListener('click', () => {
+    const index = Number(dot.dataset.carouselDot);
+    const targetCard = cards[index];
+
+    if (!targetCard || targetCard.parentElement !== grid) return;
+
+    grid.scrollTo({
+      left: targetCard.offsetLeft - (grid.clientWidth - targetCard.offsetWidth) / 2,
+      behavior: reduceMotionQuery.matches ? 'auto' : 'smooth',
+    });
+  });
+});
+
+const carouselHintObserver =
+  'IntersectionObserver' in window
+    ? new IntersectionObserver(
+        (entries, observer) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            carouselSectionHasEntered = true;
+            syncMobileCarousel();
+            observer.disconnect();
+          }
+        },
+        { threshold: 0.35 }
+      )
+    : null;
+
+if (carouselHintObserver && grid) {
+  carouselHintObserver.observe(grid);
+} else {
+  carouselSectionHasEntered = true;
+  syncMobileCarousel();
+}
 
 const cardObserver =
   'IntersectionObserver' in window
@@ -383,3 +715,4 @@ cards.forEach((card, index) => {
 });
 
 syncCardStates();
+syncCompactLayout();

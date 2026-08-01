@@ -1,11 +1,13 @@
 :root {
-  --bg: #faf6ef;
-  --surface: rgba(255, 252, 247, 0.94);
-  --surface-strong: rgba(246, 240, 231, 0.96);
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-strong: #f8f8f5;
   --text: #30271f;
   --text-muted: #6f6255;
   --line: rgba(48, 39, 31, 0.12);
   --accent: #be8a42;
+  --color-primary: #5d6f44;
+  --color-primary-strong: #4d6038;
   --shadow: 0 18px 42px rgba(48, 39, 31, 0.08);
   --shadow-strong: 0 26px 58px rgba(48, 39, 31, 0.12);
   --radius-xl: 2rem;
@@ -26,10 +28,13 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: "Manrope", Arial, sans-serif;
+  font-size-adjust: 0.52;
+  font-synthesis: none;
   color: var(--text);
   background:
-    radial-gradient(circle at top right, rgba(190, 138, 66, 0.12), transparent 28%),
-    linear-gradient(180deg, #fcf8f2 0%, #f9f4eb 48%, #f3ece2 100%);
+    radial-gradient(circle at 88% 8%, rgba(93, 111, 68, 0.09), transparent 30%),
+    radial-gradient(circle at 8% 78%, rgba(190, 138, 66, 0.06), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbf8 100%);
 }
 
 body.modal-open {
@@ -54,6 +59,7 @@ img {
 }
 
 .test-section {
+  position: relative;
   padding-block: clamp(1rem, 3vw, 2rem);
 }
 
@@ -89,11 +95,23 @@ img {
   transition: filter 320ms var(--ease), transform 320ms var(--ease);
 }
 
+.experience-card-placeholder {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid transparent;
+  border-radius: 1.7rem;
+  background: rgba(48, 39, 31, 0.025);
+  pointer-events: none;
+  transition: height 320ms var(--ease), background 320ms var(--ease);
+}
+
 .card-dimmer {
   position: fixed;
   inset: 0;
   z-index: 10;
   background: rgba(18, 14, 10, 0.38);
+  -webkit-backdrop-filter: blur(9px) saturate(0.9);
+  backdrop-filter: blur(9px) saturate(0.9);
   opacity: 0;
   transition: opacity 260ms var(--ease);
 }
@@ -116,9 +134,7 @@ img {
   padding: 1.05rem;
   align-content: start;
   min-height: 100%;
-  background:
-    linear-gradient(180deg, rgba(255, 254, 251, 0.98), rgba(247, 240, 231, 0.96)),
-    rgba(255, 252, 247, 0.94);
+  background: linear-gradient(180deg, #ffffff 0%, #fcfbf8 100%);
   border: 1px solid rgba(48, 39, 31, 0.12);
   border-radius: 1.7rem;
   overflow: hidden;
@@ -147,6 +163,8 @@ img {
 }
 
 .experience-image {
+  width: 100%;
+  margin: 0;
   aspect-ratio: 4 / 3;
   min-height: 15rem;
   padding: 0.25rem;
@@ -156,23 +174,26 @@ img {
     linear-gradient(180deg, rgba(255, 252, 247, 0.92), rgba(245, 238, 228, 0.9));
 }
 
+.experience-gallery {
+  display: contents;
+}
+
+.experience-thumbnails {
+  display: none;
+}
+
 .experience-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 42%;
-  transform: scale(1);
-  transition: transform 420ms var(--ease);
-}
-
-.experience-card.is-visible:hover .experience-image img {
-  transform: scale(1.03);
+  object-position: center;
 }
 
 .experience-copy {
   display: grid;
   gap: 0.72rem;
   max-width: 24rem;
+  min-width: 0;
 }
 
 .experience-content {
@@ -205,10 +226,11 @@ img {
 }
 
 .experience-note {
-  min-height: 2.75rem;
-  font-size: 0.92rem;
+  min-height: 2.55rem;
+  max-width: 32ch;
+  font-size: 0.84rem;
   line-height: 1.45;
-  color: rgba(111, 98, 85, 0.9);
+  color: rgba(111, 98, 85, 0.72);
 }
 
 .experience-trigger,
@@ -302,6 +324,7 @@ img {
   justify-content: center;
   box-shadow: 0 10px 24px rgba(48, 39, 31, 0.12);
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: scale(0.9);
   transition: opacity 240ms var(--ease), transform 240ms var(--ease);
@@ -309,6 +332,7 @@ img {
 
 .experience-card.is-expanded .experience-close {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: scale(1);
 }
@@ -328,14 +352,17 @@ img {
 
 .experience-card.is-expanded {
   position: fixed;
-  top: var(--card-fit-top, var(--card-origin-top, 50%));
-  left: var(--card-origin-left, 50%);
-  width: var(--card-modal-width, min(calc(var(--card-origin-width, 20rem) * 2.15), calc(100vw - 2rem), 64rem));
-  height: var(--card-fit-height, var(--card-origin-height, 34rem));
+  top: 50%;
+  left: 50%;
+  width: 85vw;
+  height: 85vh;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
   overflow: hidden;
   gap: 0;
-  padding: 1rem;
-  transform: translate(0, 0) scale(1);
+  padding: 32px;
+  transform: translate(-50%, -50%) scale(1);
   z-index: 30;
   isolation: isolate;
   background:
@@ -346,8 +373,8 @@ img {
 }
 
 .experience-card.is-expand-left.is-expanded {
-  left: auto;
-  right: var(--card-origin-right, 50%);
+  left: 50%;
+  right: auto;
 }
 
 .experience-card.is-modal {
@@ -356,31 +383,27 @@ img {
 
 .experience-card.is-opening {
   transition:
-    top 320ms var(--ease),
-    left 320ms var(--ease),
     width 320ms var(--ease),
     height 320ms var(--ease),
     box-shadow 240ms var(--ease),
-    border-color 240ms var(--ease),
-    transform 320ms var(--ease);
+    border-color 240ms var(--ease);
 }
 
 .experience-card.is-modal.is-expanded {
-  width: var(--card-modal-width, min(calc(var(--card-origin-width, 20rem) * 2.15), calc(100vw - 2rem), 64rem));
-  height: var(--card-fit-height, var(--card-origin-height, 34rem));
-  transform: translate(0, 0) scale(1.015);
+  width: 85vw;
+  height: 85vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .experience-card.is-modal.is-expand-left.is-expanded {
-  left: auto;
-  right: var(--card-origin-right, 50%);
-  transform: translate(0, 0) scale(1.015);
+  left: 50%;
+  right: auto;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .test-shell.is-dimmed .experience-card:not(.is-expanded) {
-  opacity: 0.12;
-  transform: translateY(10px) scale(0.97);
-  filter: saturate(0.92);
   pointer-events: none;
 }
 
@@ -388,58 +411,124 @@ img {
   max-width: 100%;
 }
 
-.experience-card.is-expanded .experience-image {
-  grid-area: media;
-  min-height: 0;
-  aspect-ratio: auto;
-  box-shadow: inset 0 0 0 1px rgba(48, 39, 31, 0.04);
-}
-
-.experience-card.is-expanded .experience-content {
-  grid-area: content;
-  display: grid;
-  grid-template-rows: auto auto auto minmax(0, 1fr);
-  align-content: start;
-  gap: 0.6rem;
-  min-height: 0;
-  overflow: hidden;
-  height: 100%;
-}
-
 @media (min-width: 760px) {
+  /* Desktop card images use the card shell as their frame. */
+  .experience-card:not(.is-expanded) .experience-image {
+    width: calc(100% + 2.1rem);
+    margin: -1.05rem -1.05rem 0;
+    padding: 0;
+    border-radius: 1.7rem;
+  }
+
   .experiences-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.25rem;
   }
 
-  .experience-card:first-child {
-    grid-column: 1 / -1;
-    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-    align-items: center;
-  }
-
-  .experience-card:first-child .experience-image {
-    min-height: 24rem;
-  }
-
   .experience-card.is-expanded {
     grid-column: auto;
-    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
-    grid-template-areas: "media content";
     align-items: stretch;
-    width: var(--card-modal-width, min(calc(var(--card-origin-width, 20rem) * 2.15), calc(100vw - 2rem), 64rem));
-    height: var(--card-fit-height, var(--card-origin-height, 34rem));
+  }
+
+  .experience-card.is-expanded .experience-gallery {
+    grid-column: 1 / 8;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    gap: 12px;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .experience-card.is-expanded .experience-image {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    align-self: start;
+    box-shadow: inset 0 0 0 1px rgba(48, 39, 31, 0.04);
+  }
+
+  .experience-card.is-expanded .experience-image img {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    object-position: center;
+  }
+
+  .experience-card.is-expanded .experience-content {
+    grid-column: 8 / 13;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+    min-height: 0;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .experience-card.is-expanded .experience-thumbnails {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .experience-card.is-expanded .experience-thumb {
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface-strong);
+    cursor: pointer;
+  }
+
+  .experience-card.is-expanded .experience-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .experience-card.is-expanded .experience-copy h2 {
+    font-size: 28px;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .experience-card.is-expanded .experience-summary {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .experience-card.is-expanded .experience-note {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+
+  .experience-card.is-expanded .experience-actions {
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
   }
 
   .experience-card.is-expanded .experience-details {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     min-height: 0;
     overflow: auto;
     padding-right: 0.15rem;
   }
 
-  .experience-card.is-expanded .experience-image {
-    min-height: 0;
-    aspect-ratio: auto;
+  .experience-card.is-expanded .experience-details .experience-actions {
+    margin-top: auto;
   }
 
   .experience-card.is-expanded .experience-copy {
@@ -449,17 +538,28 @@ img {
   .experience-card.is-expanded .experience-image img {
     object-position: center center;
   }
+
+  .experience-card.is-expanded.compact-layout {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .experience-card.is-expanded.compact-layout .experience-gallery {
+    gap: 8px;
+  }
+
+  .experience-card.is-expanded.compact-layout .experience-thumbnails {
+    display: none;
+  }
+
+  .experience-card.is-expanded.compact-layout .experience-copy h2 {
+    font-size: 22px;
+  }
 }
 
 @media (min-width: 1080px) {
   .experiences-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .experience-card:first-child {
-    grid-column: auto;
-    grid-template-columns: unset;
-    align-items: start;
   }
 }
 
@@ -487,12 +587,869 @@ img {
   }
 
   .experience-card.is-expanded {
-    width: var(--card-modal-width, min(92vw, 22rem));
-    height: auto;
+    display: block;
+    width: calc(100vw - 32px);
+    height: 85vh;
+    padding: 0;
+    overflow: auto;
+  }
+
+  .experience-card.is-expanded .experience-gallery {
+    display: block;
+    width: 100%;
+  }
+
+  .experience-card.is-expanded .experience-image {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    box-shadow: inset 0 0 0 1px rgba(48, 39, 31, 0.04);
+  }
+
+  .experience-card.is-expanded .experience-image img {
+    width: 100%;
+    height: 100%;
+    object-position: center;
+  }
+
+  .experience-card.is-expanded .experience-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 16px;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .experience-card.is-expanded .experience-details {
     max-height: min(9rem, calc(var(--test-vh, 1vh) * 20));
+  }
+
+  .experience-card.is-expanded .experience-thumbnails {
+    display: none;
+  }
+
+  .experience-card.is-expanded .experience-copy h2 {
+    font-size: 22px;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+}
+
+/* Premium booking modal: adaptive two-column detail view. */
+@media (min-width: 768px) {
+  .experience-card.is-expanded,
+  .experience-card.is-modal.is-expanded {
+    width: min(1200px, 90vw);
+    height: min(720px, 90vh);
+    max-height: 90vh;
+    padding: 32px;
+    gap: 32px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    grid-template-areas: "gallery content";
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .experience-card.is-expanded .experience-gallery {
+    grid-area: gallery;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 16px;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .experience-card.is-expanded .experience-image {
+    grid-column: auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+  }
+
+  .experience-card.is-expanded .experience-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .experience-card.is-expanded .experience-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+  }
+
+  .experience-card.is-expanded .experience-thumb {
+    position: relative;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface-strong);
+    cursor: pointer;
+    transition: border-color 220ms var(--ease), transform 220ms var(--ease), opacity 220ms var(--ease);
+  }
+
+  .experience-card.is-expanded .experience-thumb:hover {
+    transform: translateY(-2px);
+    opacity: 0.88;
+  }
+
+  .experience-card.is-expanded .experience-thumb.is-active {
+    border-color: var(--accent);
+  }
+
+  .experience-card.is-expanded .experience-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .experience-card.is-expanded .experience-content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+    padding: 8px 8px 8px 0;
+  }
+
+  .experience-card.is-expanded .experience-copy {
+    max-width: 42rem;
+  }
+
+  .experience-card.is-expanded .experience-copy h2 {
+    margin: 0 0 16px;
+    font-size: clamp(1.75rem, 1.35rem + 1vw, 2.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.04em;
+  }
+
+  .experience-card.is-expanded .experience-summary {
+    margin: 0 0 12px;
+    font-size: clamp(0.95rem, 0.88rem + 0.2vw, 1.05rem);
+    line-height: 1.65;
+  }
+
+  .experience-card.is-expanded .experience-note {
+    margin: 0 0 32px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .experience-card.is-expanded .experience-details {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    max-height: none;
+    overflow: auto;
+    padding: 24px 8px 0 0;
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .experience-card.is-expanded .experience-details p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .experience-card.is-expanded .experience-actions {
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 24px;
+  }
+
+  .experience-card.is-expanded .experience-booking {
+    min-height: 48px;
+    padding: 14px 28px;
+    border-radius: 8px;
+  }
+
+  .experience-card.is-expanded.compact-layout {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .experience-card.is-expanded.compact-layout .experience-thumbnails {
+    display: none;
+  }
+
+  .experience-card.is-expanded.compact-layout .experience-copy h2 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 767px) {
+  .experience-card.is-expanded,
+  .experience-card.is-modal.is-expanded {
+    width: calc(100vw - 32px);
+    height: min(760px, 90vh);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .experience-card.is-expanded .experience-gallery {
+    display: block;
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .experience-card.is-expanded .experience-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 0;
+  }
+
+  .experience-card.is-expanded .experience-thumbnails {
+    display: none;
+  }
+
+  .experience-card.is-expanded .experience-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    overflow: auto;
+    padding: 24px 16px 16px;
+  }
+
+  .experience-card.is-expanded .experience-copy h2 {
+    margin-bottom: 16px;
+    font-size: clamp(1.45rem, 5vw, 1.9rem);
+  }
+
+  .experience-card.is-expanded .experience-details {
+    padding-top: 16px;
+    margin-top: 8px;
+  }
+
+  .experience-card.is-expanded .experience-actions {
+    margin-top: auto;
+    padding-top: 24px;
+  }
+
+  .experience-card.is-expanded .experience-booking {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+    border-radius: 8px;
+  }
+}
+
+.experience-meta {
+  display: none;
+}
+
+.experience-card.is-expanded .experience-trigger {
+  display: none;
+}
+
+.experience-card.is-expanded .experience-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 24px;
+}
+
+.experience-card.is-expanded .experience-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(246, 240, 231, 0.56);
+}
+
+.experience-card.is-expanded .experience-meta-item strong {
+  font-size: 0.82rem;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.experience-card.is-expanded .experience-meta-item small,
+.experience-card.is-expanded .experience-price small {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.experience-card.is-expanded .experience-price {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+
+.experience-card.is-expanded .experience-price strong {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+@media (max-width: 767px) {
+  .experience-card.is-expanded .experience-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Keep normal-card actions aligned to the card, not to text length. */
+.experience-card:not(.is-expanded) .experience-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.experience-card:not(.is-expanded) .experience-copy {
+  display: flex;
+  flex: 0 0 15rem;
+  flex-direction: column;
+  height: 15rem;
+  min-height: 15rem;
+}
+
+.experience-card:not(.is-expanded) .experience-trigger {
+  margin-top: auto;
+}
+
+.carousel-hint {
+  display: none;
+}
+
+.carousel-indicator {
+  display: none;
+}
+
+.carousel-edge-hint {
+  display: none;
+}
+
+/* Desktop hover focus: dim the other cards in a deliberate sequence. */
+@media (hover: hover) and (pointer: fine) {
+  .experience-card:not(.is-expanded):hover {
+    z-index: 2;
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 26px 58px rgba(48, 39, 31, 0.18);
+  }
+
+  .experiences-grid:has(.experience-card:hover) .experience-card:not(:hover) {
+    filter: brightness(0.80) saturate(0.66);
+    transition-delay: 1s;
+  }
+
+  .experiences-grid:has(.experience-card:nth-child(1):hover) .experience-card:nth-child(2) {
+    transition-delay: 120ms;
+  }
+
+  .experiences-grid:has(.experience-card:nth-child(1):hover) .experience-card:nth-child(3) {
+    transition-delay: 160ms;
+  }
+
+  .experiences-grid:has(.experience-card:nth-child(2):hover) .experience-card:nth-child(1) {
+    transition-delay: 120ms;
+  }
+
+  .experiences-grid:has(.experience-card:nth-child(2):hover) .experience-card:nth-child(3) {
+    transition-delay: 160ms;
+  }
+
+  .experiences-grid:has(.experience-card:nth-child(3):hover) .experience-card:nth-child(2) {
+    transition-delay: 120ms;
+  }
+
+  .experiences-grid:has(.experience-card:nth-child(3):hover) .experience-card:nth-child(1) {
+    transition-delay: 160ms;
+  }
+}
+
+@media (max-width: 759px) {
+  .experience-card:not(.is-expanded) .experience-copy {
+    flex-basis: 16rem;
+    height: 16rem;
+    min-height: 16rem;
+  }
+}
+
+/* Content-driven modal sizing keeps the gallery prominent without empty height. */
+.experience-card.is-expanded,
+.experience-card.is-modal.is-expanded {
+  width: min(1200px, 90vw);
+  height: auto;
+  min-height: 0;
+  max-height: 85vh;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfbf8 100%);
+}
+
+.experience-card.is-expanded .experience-image {
+  border-radius: 16px;
+}
+
+.experience-card.is-expanded .experience-thumb {
+  border-radius: 12px;
+}
+
+@media (min-width: 768px) {
+  .experience-card.is-expanded .experience-gallery {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    grid-column: 1 / 2;
+    grid-row: auto;
+    height: auto;
+    max-height: none;
+    align-content: start;
+    overflow: visible;
+  }
+
+  .experience-card.is-expanded .experience-content {
+    height: auto;
+    max-height: calc(85vh - 64px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .experience-card.is-expanded .experience-image {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .experience-card.is-expanded .experience-thumbnails {
+    grid-column: 1 / -1;
+  }
+
+  .experience-card.is-expanded .experience-meta-item {
+    padding: 8px 10px;
+    border-color: rgba(48, 39, 31, 0.08);
+    background: rgba(246, 240, 231, 0.32);
+  }
+}
+
+@media (max-width: 767px) {
+  .experience-card.is-expanded,
+  .experience-card.is-modal.is-expanded {
+    width: calc(100vw - 32px);
+    max-height: 85vh;
+  }
+
+  .experience-card.is-expanded .experience-content {
+    max-height: calc(85vh - 36vw);
+  }
+}
+
+/* Mobile carousel: one centered card with tilted neighboring cards peeking in. */
+@media (max-width: 759px) {
+  .section-head {
+    margin-bottom: 3.6rem;
+  }
+
+  .carousel-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    margin: 0 auto 1rem;
+  }
+
+  .carousel-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .carousel-dot::before {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(93, 111, 68, 0.28);
+    content: "";
+    transition: transform 480ms var(--ease), background 480ms var(--ease);
+  }
+
+  .carousel-dot:not(:last-child)::after {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 8px);
+    width: 20px;
+    height: 1px;
+    background: rgba(93, 111, 68, 0.24);
+    content: "";
+  }
+
+  .carousel-dot[aria-current="true"] {
+    background: transparent;
+  }
+
+  .carousel-dot[aria-current="true"]::before {
+    background: var(--color-primary);
+    transform: scale(1.8);
+  }
+
+  .experiences-grid {
+    display: flex;
+    width: calc(100% + 2rem);
+    margin-inline: -1rem;
+    gap: 12px;
+    padding: 0 9vw 1.5rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 9vw;
+    perspective: 1000px;
+    scrollbar-width: none;
+  }
+
+  .experiences-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .experiences-grid > .experience-card:not(.is-expanded),
+  .experiences-grid > .experience-card-placeholder {
+    flex: 0 0 82vw;
+    width: 82vw;
+  }
+
+  .experiences-grid > .experience-card:not(.is-expanded) {
+    min-height: 0;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    transform-origin: center center;
+    transition:
+      transform 760ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .experiences-grid > .experience-card.is-carousel-current {
+    z-index: 3;
+    transform: translateZ(0) rotateY(0deg) rotateZ(0deg) scale(1);
+    filter: none;
+    opacity: 1;
+  }
+
+  .experiences-grid > .experience-card.is-carousel-previous {
+    z-index: 2;
+    transform: translateX(4px) rotateY(12deg) rotateZ(-2deg) scale(0.88);
+    transform-origin: right center;
+    box-shadow: 16px 18px 32px rgba(48, 39, 31, 0.16);
+  }
+
+  .experiences-grid > .experience-card.is-carousel-next {
+    z-index: 2;
+    transform: translateX(-4px) rotateY(-12deg) rotateZ(2deg) scale(0.88);
+    transform-origin: left center;
+    box-shadow: -16px 18px 32px rgba(48, 39, 31, 0.16);
+  }
+
+  .experiences-grid > .experience-card:not(.is-carousel-current):not(.is-carousel-previous):not(.is-carousel-next) {
+    z-index: 1;
+    transform: scale(0.9);
+    filter: brightness(0.9) saturate(0.9);
+    opacity: 0.45;
+  }
+
+  .carousel-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 auto;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .carousel-hint-line {
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.7;
+  }
+
+  /* Opened cards leave the carousel track and use their own contained scroll area. */
+  .experience-card.is-expanded,
+  .experience-card.is-modal.is-expanded {
+    width: calc(100vw - 32px);
+    height: min(760px, calc(85vh - 72px));
+    height: min(760px, calc(85dvh - 72px));
+    max-height: calc(85vh - 72px);
+    max-height: calc(85dvh - 72px);
+    overflow: visible;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .experience-card.is-expanded .experience-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    overscroll-behavior: contain;
+  }
+
+  .experience-card.is-expanded .experience-image {
+    width: 100%;
+    padding: 0;
+    background: none;
+    border-radius: 1.7rem 1.7rem 0 0;
+  }
+
+  .experience-card.is-expanded .experience-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .experience-card.is-expanded .experience-copy {
+    flex: 0 0 auto;
+  }
+
+  .experience-card.is-expanded .experience-details {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: 16px;
+  }
+
+  .card-modal-layer .experience-actions.is-mobile-booking {
+    position: fixed;
+    right: 16px;
+    top: var(--mobile-booking-top);
+    left: 16px;
+    z-index: 2;
+    display: block;
+    margin: 0;
+    pointer-events: auto;
+  }
+
+  .card-modal-layer .experience-actions.is-mobile-booking .experience-price {
+    display: none;
+  }
+
+  .card-modal-layer .experience-actions.is-mobile-booking .experience-booking {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+    border-radius: 12px;
+  }
+}
+
+/* Tablet carousel: iPad-sized screens keep the touch-first card experience. */
+@media (min-width: 760px) and (max-width: 1199px) {
+  .section-head {
+    margin-bottom: 2.6rem;
+  }
+
+  .carousel-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    margin: 0 auto 1rem;
+  }
+
+  .carousel-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .carousel-dot::before {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(93, 111, 68, 0.28);
+    content: "";
+    transition: transform 480ms var(--ease), background 480ms var(--ease);
+  }
+
+  .carousel-dot:not(:last-child)::after {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 8px);
+    width: 20px;
+    height: 1px;
+    background: rgba(93, 111, 68, 0.24);
+    content: "";
+  }
+
+  .carousel-dot[aria-current="true"]::before {
+    background: var(--color-primary);
+    transform: scale(1.8);
+  }
+
+  .experiences-grid {
+    display: flex;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    gap: 16px;
+    padding: 0 9vw 1.5rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 9vw;
+    perspective: 1200px;
+    scrollbar-width: none;
+  }
+
+  .experiences-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .experiences-grid > .experience-card:not(.is-expanded),
+  .experiences-grid > .experience-card-placeholder {
+    flex: 0 0 82vw;
+    width: 82vw;
+  }
+
+  .experiences-grid > .experience-card:not(.is-expanded) {
+    min-height: 0;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    transform-origin: center center;
+    transition:
+      transform 760ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .experiences-grid > .experience-card.is-carousel-current {
+    z-index: 3;
+    transform: translateZ(0) scale(1);
+    filter: none;
+    opacity: 1;
+  }
+
+  .experiences-grid > .experience-card.is-carousel-previous {
+    z-index: 2;
+    transform: translateX(4px) rotateY(12deg) rotateZ(-2deg) scale(0.88);
+    transform-origin: right center;
+    box-shadow: 16px 18px 32px rgba(48, 39, 31, 0.16);
+  }
+
+  .experiences-grid > .experience-card.is-carousel-next {
+    z-index: 2;
+    transform: translateX(-4px) rotateY(-12deg) rotateZ(2deg) scale(0.88);
+    transform-origin: left center;
+    box-shadow: -16px 18px 32px rgba(48, 39, 31, 0.16);
+  }
+
+  .experiences-grid > .experience-card:not(.is-carousel-current):not(.is-carousel-previous):not(.is-carousel-next) {
+    z-index: 1;
+    transform: scale(0.9);
+    filter: brightness(0.9) saturate(0.9);
+    opacity: 0.45;
+  }
+
+  .carousel-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 auto;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .carousel-hint-line {
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.7;
+  }
+}
+
+@keyframes carousel-scroll-marker {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: translateX(0) rotate(45deg);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: translateX(-8px) rotate(45deg);
+  }
+}
+
+@keyframes carousel-scroll-marker-delayed {
+  0%,
+  14% {
+    opacity: 0;
+    transform: translateX(0) rotate(45deg);
+  }
+
+  52% {
+    opacity: 0.95;
+    transform: translateX(-8px) rotate(45deg);
+  }
+
+  100% {
+    opacity: 0.18;
+    transform: translateX(0) rotate(45deg);
+  }
+}
+
+@media (max-width: 1199px) {
+  .carousel-edge-hint.is-visible {
+    position: absolute;
+    top: 50%;
+    right: 0.5vw;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-top: 3px solid var(--color-primary);
+    border-right: 3px solid var(--color-primary);
+    border-radius: 3px;
+    content: "";
+    pointer-events: none;
+    animation: carousel-scroll-marker 1500ms ease-in-out infinite;
+  }
+
+  .carousel-edge-hint.is-visible.is-second-hint {
+    animation: carousel-scroll-marker-delayed 2100ms ease-in-out infinite;
   }
 }
 
@@ -502,12 +1459,19 @@ img {
   }
 
   .experience-card,
-  .experience-image img {
-    transition: none;
-  }
-
   .experience-card {
     transform: none;
     opacity: 1;
+  }
+
+  .experiences-grid > .experience-card {
+    filter: none;
+    transition: none;
+    animation: none;
+  }
+
+  .carousel-edge-hint.is-visible {
+    animation: none;
+    opacity: 0.7;
   }
 }

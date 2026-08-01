@@ -12,10 +12,10 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
 
-  --color-bg: #faf6ef;
-  --color-bg-strong: #f1e8dc;
-  --color-surface: rgba(255, 252, 247, 0.88);
-  --color-surface-strong: #fcf8f1;
+  --color-bg: #ffffff;
+  --color-bg-strong: #f5faf7;
+  --color-surface: #ffffff;
+  --color-surface-strong: #f8fbf8;
   --color-text: #30271f;
   --color-text-muted: #6f6255;
   --color-line: rgba(48, 39, 31, 0.1);
@@ -62,8 +62,9 @@ body {
   line-height: 1.6;
   color: var(--color-text);
   background:
-    radial-gradient(circle at top right, rgba(190, 138, 66, 0.14), transparent 28%),
-    linear-gradient(180deg, #fcf8f2 0%, #f9f4eb 48%, #f3ece2 100%);
+    radial-gradient(circle at 88% 8%, rgba(93, 111, 68, 0.08), transparent 30%),
+    radial-gradient(circle at 8% 78%, rgba(190, 138, 66, 0.045), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #fbfdfb 100%);
   overscroll-behavior-y: none;
 }
 
@@ -125,7 +126,7 @@ button {
 }
 
 .section-soft {
-  background: linear-gradient(180deg, rgba(255, 252, 247, 0.72), rgba(249, 244, 236, 0.92));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(249, 252, 249, 0.98));
 }
 
 .scenic-break {
@@ -775,9 +776,8 @@ p {
   padding: 1.05rem;
   align-content: start;
   min-height: 100%;
-  background:
-    linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(246, 240, 231, 0.94));
-  border-color: rgba(48, 39, 31, 0.16);
+  background: linear-gradient(180deg, #ffffff 0%, #f4f8f3 100%);
+  border-color: rgba(85, 102, 61, 0.16);
   overflow: hidden;
   transition:
     transform var(--transition-base),
@@ -788,7 +788,7 @@ p {
 }
 
 .experience-card:hover {
-  border-color: rgba(48, 39, 31, 0.22);
+  border-color: rgba(85, 102, 61, 0.28);
   box-shadow: 0 26px 58px rgba(48, 39, 31, 0.12);
 }
 
@@ -845,7 +845,7 @@ p {
   margin-top: 0.95rem;
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: #55664d;
 }
 
 .experience-image {
@@ -863,6 +863,7 @@ p {
 .experience-card p {
   font-size: 0.97rem;
   line-height: 1.55;
+  color: #667064;
 }
 
 .experience-card .experience-note {
@@ -2749,3 +2750,123 @@ p {
 /* ====================================
    Gallery typography
 ==================================== */
+
+/* Experience cards: let the main photo form the card's top edge. */
+.experience-card {
+  --experience-card-pad: 1.05rem;
+  --experience-card-radius: var(--radius-lg);
+}
+
+.experience-card .experience-image {
+  width: calc(100% + (var(--experience-card-pad) * 2));
+  margin: calc(var(--experience-card-pad) * -1) calc(var(--experience-card-pad) * -1) 0;
+  padding: 0;
+  border-radius: var(--experience-card-radius);
+}
+
+@media (max-width: 979px) {
+  .experience-card {
+    --experience-card-pad: 0.95rem;
+    --experience-card-radius: 1.25rem;
+  }
+}
+
+@media (max-width: 759px) {
+  .experience-card {
+    --experience-card-pad: 0.92rem;
+  }
+}
+
+/* Unified nature-white palette for the complete site. */
+:root {
+  --color-bg: #ffffff;
+  --color-bg-strong: #f2f8f3;
+  --color-surface: #ffffff;
+  --color-surface-strong: #f5faf6;
+  --color-text: #24342a;
+  --color-text-muted: #647268;
+  --color-line: rgba(55, 78, 62, 0.14);
+  --color-primary: #627653;
+  --color-primary-strong: #4d6242;
+  --color-accent: #a9824b;
+  --shadow-soft: 0 18px 42px rgba(42, 65, 49, 0.07);
+  --focus-ring: 0 0 0 3px rgba(98, 118, 83, 0.28);
+}
+
+body {
+  background:
+    radial-gradient(circle at 88% 8%, rgba(98, 118, 83, 0.07), transparent 30%),
+    radial-gradient(circle at 8% 78%, rgba(169, 130, 75, 0.035), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #fbfdfb 100%);
+}
+
+.section-soft {
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbf8 100%);
+}
+
+.header-inner {
+  border-color: rgba(55, 78, 62, 0.14);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 14px 28px rgba(42, 65, 49, 0.06);
+}
+
+.story-panel,
+.location-panel,
+.cta-panel,
+.stats-card,
+.info-card,
+.term-card,
+.legal-card,
+.terms-aside,
+.term-accordion {
+  border-color: rgba(55, 78, 62, 0.14);
+  background: linear-gradient(180deg, #ffffff 0%, #f5faf6 100%);
+  box-shadow: var(--shadow-soft);
+}
+
+.story-panel,
+.location-panel,
+.cta-panel {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f8f3 100%);
+}
+
+.experience-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f7f2 100%);
+  border-color: rgba(85, 108, 79, 0.18);
+}
+
+.experience-card:hover {
+  border-color: rgba(85, 108, 79, 0.3);
+}
+
+.cta-action,
+.cta-contact-link,
+.terms-highlights li,
+.term-accordion-icon,
+.menu-toggle {
+  border-color: rgba(55, 78, 62, 0.14);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.term-accordion[open] {
+  border-color: rgba(85, 108, 79, 0.24);
+  background: linear-gradient(135deg, #ffffff 0%, #eef7f0 100%);
+}
+
+.who-modal-backdrop {
+  background: rgba(25, 40, 30, 0.56);
+}
+
+.who-modal-card {
+  border-color: rgba(55, 78, 62, 0.14);
+  background:
+    radial-gradient(circle at top right, rgba(169, 130, 75, 0.08), transparent 24%),
+    linear-gradient(180deg, #ffffff 0%, #f2f8f3 100%);
+  box-shadow: 0 32px 80px rgba(25, 40, 30, 0.2);
+}
+
+.scenic-break {
+  background-image:
+    linear-gradient(180deg, rgba(25, 40, 30, 0.08), rgba(25, 40, 30, 0.2)),
+    url("./imagens/barragem_quadrada.png");
+}
