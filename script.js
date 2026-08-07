@@ -142,6 +142,10 @@
       menuToggle.setAttribute('aria-expanded', 'false');
       document.body.classList.remove('menu-open');
 
+      if (header) {
+        header.classList.remove('is-hidden');
+      }
+
       mobileMenu.classList.remove('is-open');
       syncMenuToggleLabel();
 
@@ -169,6 +173,9 @@
       menuToggle.setAttribute('aria-expanded', 'true');
       mobileMenu.hidden = false;
       document.body.classList.add('menu-open');
+      if (header) {
+        header.classList.remove('is-hidden');
+      }
       menuToggle.setAttribute(
         'aria-label',
         currentLang === 'pt' ? 'Fechar menu' : 'Close menu'
@@ -177,10 +184,6 @@
       if (reduceMotionQuery.matches) {
         mobileMenu.classList.add('is-open');
         return;
-      }
-
-      if (header) {
-        header.classList.remove('is-hidden');
       }
 
       window.requestAnimationFrame(() => {
@@ -491,6 +494,617 @@
   };
 
   setupInfoAccordion();
+
+  // ==========================
+  // Experience cards
+  // ==========================
+  const setupExperienceCards = () => {
+    const experiencesRoot = document.querySelector('[data-experiences-root]');
+    if (!experiencesRoot) return;
+
+    const grid = experiencesRoot.querySelector('[data-experience-grid]');
+    const dimmer = experiencesRoot.querySelector('[data-card-dimmer]');
+    const modalLayer = experiencesRoot.querySelector('[data-card-modal-layer]');
+    const carouselDots = Array.from(experiencesRoot.querySelectorAll('[data-carousel-dot]'));
+    const carouselEdgeHint = experiencesRoot.querySelector('[data-carousel-edge-hint]');
+    const cards = Array.from(experiencesRoot.querySelectorAll('[data-experience-card]'));
+
+    if (!grid || !modalLayer || !cards.length) return;
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const originalMainImages = new WeakMap();
+    const cardOrigins = new Map();
+    const mobileBookingOrigins = new Map();
+    const carouselHintsShown = new Set();
+
+    let activeCard = null;
+    let lastTrigger = null;
+    let viewportTimer = null;
+    let viewportFrame = 0;
+    let carouselFrame = 0;
+    let carouselSectionHasEntered = false;
+    let activeCarouselHintIndex = null;
+
+    const isCompactCarousel = () => window.matchMedia('(max-width: 1199px)').matches;
+    const isMobileBooking = () => window.matchMedia('(max-width: 759px)').matches;
+
+    const getViewportHeight = () => {
+      const viewportHeight = window.visualViewport?.height || window.innerHeight;
+      return Math.max(1, Math.round(viewportHeight));
+    };
+
+    const getGridCards = () => cards.filter((card) => card.parentElement === grid);
+
+    const getFocusableElements = () => {
+      if (!activeCard) return [];
+
+      const focusables = Array.from(activeCard.querySelectorAll(focusableSelector));
+      const externalBooking = modalLayer.querySelector('.experience-actions.is-mobile-booking');
+
+      if (externalBooking) {
+        focusables.push(...externalBooking.querySelectorAll(focusableSelector));
+      }
+
+      return [...new Set(focusables)].filter(
+        (element) =>
+          !element.hasAttribute('disabled') &&
+          element.getAttribute('aria-hidden') !== 'true' &&
+          element.getClientRects().length > 0
+      );
+    };
+
+    const isFocusWithinCardModal = (element) => {
+      if (!activeCard || !element) return false;
+      if (activeCard.contains(element)) return true;
+
+      const externalBooking = modalLayer.querySelector('.experience-actions.is-mobile-booking');
+      return Boolean(externalBooking?.contains(element));
+    };
+
+    const syncCompactLayout = () => {
+      const compact = getViewportHeight() < 760;
+      cards.forEach((card) => {
+        card.classList.toggle('compact-layout', card === activeCard && compact);
+      });
+    };
+
+    const syncCarouselEdgeHintPosition = (activeCardForHint) => {
+      if (!carouselEdgeHint || !activeCardForHint) return;
+
+      const sectionRect = experiencesRoot.getBoundingClientRect();
+      const cardRect = activeCardForHint.getBoundingClientRect();
+      const markerTop = cardRect.top + cardRect.height / 2 - sectionRect.top - 10;
+
+      carouselEdgeHint.style.top = `${Math.max(0, markerTop)}px`;
+    };
+
+    const clearCarouselHint = () => {
+      activeCarouselHintIndex = null;
+      grid.classList.remove('is-carousel-hinting');
+      carouselEdgeHint?.classList.remove('is-visible', 'is-second-hint');
+    };
+
+    const syncCarouselHint = (currentIndex, gridCards) => {
+      if (!gridCards[currentIndex + 1]) {
+        clearCarouselHint();
+        return;
+      }
+
+      if (carouselHintsShown.has(currentIndex)) {
+        if (activeCarouselHintIndex !== currentIndex) {
+          clearCarouselHint();
+        }
+        return;
+      }
+
+      carouselHintsShown.add(currentIndex);
+      activeCarouselHintIndex = currentIndex;
+      grid.classList.remove('is-carousel-hinting');
+      carouselEdgeHint?.classList.remove('is-visible', 'is-second-hint');
+      carouselEdgeHint?.classList.toggle('is-second-hint', currentIndex === 1);
+
+      window.requestAnimationFrame(() => {
+        if (activeCarouselHintIndex !== currentIndex) return;
+
+        grid.classList.add('is-carousel-hinting');
+        carouselEdgeHint?.classList.add('is-visible');
+      });
+    };
+
+    const syncMobileCarousel = () => {
+      if (activeCard) return;
+
+      const gridCards = getGridCards();
+      if (!isCompactCarousel() || !gridCards.length) {
+        clearCarouselHint();
+        cards.forEach((card) => {
+          card.classList.remove('is-carousel-current', 'is-carousel-previous', 'is-carousel-next');
+        });
+        carouselDots.forEach((dot) => dot.setAttribute('aria-current', 'false'));
+        return;
+      }
+
+      const gridCenter = grid.scrollLeft + grid.clientWidth / 2;
+      const currentIndex = gridCards.reduce((closestIndex, card, index) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const closestCard = gridCards[closestIndex];
+        const closestCenter = closestCard.offsetLeft + closestCard.offsetWidth / 2;
+
+        return Math.abs(cardCenter - gridCenter) < Math.abs(closestCenter - gridCenter)
+          ? index
+          : closestIndex;
+      }, 0);
+
+      const currentCard = gridCards[currentIndex];
+      syncCarouselEdgeHintPosition(currentCard);
+
+      if (carouselSectionHasEntered) {
+        syncCarouselHint(currentIndex, gridCards);
+      }
+
+      cards.forEach((card) => {
+        const index = gridCards.indexOf(card);
+        card.classList.toggle('is-carousel-current', index === currentIndex);
+        card.classList.toggle('is-carousel-previous', index === currentIndex - 1);
+        card.classList.toggle('is-carousel-next', index === currentIndex + 1);
+      });
+
+      carouselDots.forEach((dot, index) => {
+        dot.setAttribute('aria-current', index === currentIndex ? 'true' : 'false');
+      });
+    };
+
+    const scheduleMobileCarouselSync = () => {
+      if (carouselFrame) return;
+
+      carouselFrame = window.requestAnimationFrame(() => {
+        carouselFrame = 0;
+        syncMobileCarousel();
+      });
+    };
+
+    const syncMobileBookingAction = () => {
+      if (!activeCard) return;
+
+      const existingOrigin = mobileBookingOrigins.get(activeCard);
+      const actions = activeCard.querySelector('.experience-actions') || existingOrigin?.actions;
+
+      if (!actions) return;
+
+      if (isMobileBooking()) {
+        if (actions.parentElement !== modalLayer) {
+          mobileBookingOrigins.set(activeCard, {
+            parent: actions.parentElement,
+            nextSibling: actions.nextSibling,
+            actions,
+          });
+          actions.classList.add('is-mobile-booking');
+          modalLayer.appendChild(actions);
+        }
+
+        activeCard.classList.add('is-mobile-booking-layout');
+        const cardRect = activeCard.getBoundingClientRect();
+        const actionHeight = actions.getBoundingClientRect().height || actions.offsetHeight;
+        const viewportHeight = getViewportHeight();
+        const gap = 12;
+        const safeSpace = 16;
+        const groupHeight = cardRect.height + gap + actionHeight;
+        const centeredTop = (viewportHeight - groupHeight) / 2;
+        const maximumTop = viewportHeight - groupHeight - safeSpace;
+        const groupTop = Math.max(safeSpace, Math.min(centeredTop, maximumTop));
+
+        activeCard.style.setProperty('--experience-mobile-card-top', `${groupTop}px`);
+        actions.style.setProperty(
+          '--mobile-booking-top',
+          `${groupTop + cardRect.height + gap}px`
+        );
+        return;
+      }
+
+      if (actions.parentElement === modalLayer) {
+        restoreMobileBookingAction(activeCard);
+      }
+    };
+
+    const scheduleExperienceViewportSync = () => {
+      window.clearTimeout(viewportTimer);
+      viewportTimer = window.setTimeout(() => {
+        if (viewportFrame) return;
+
+        viewportFrame = window.requestAnimationFrame(() => {
+          viewportFrame = 0;
+          experiencesRoot.style.setProperty('--experience-vh', `${getViewportHeight() * 0.01}px`);
+          syncCompactLayout();
+          syncMobileCarousel();
+          syncMobileBookingAction();
+        });
+      }, 100);
+    };
+
+    const setModalVisibility = (visible) => {
+      modalLayer.setAttribute('aria-hidden', visible ? 'false' : 'true');
+
+      if (dimmer) {
+        dimmer.hidden = !visible;
+        dimmer.classList.toggle('is-visible', visible);
+        dimmer.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      }
+
+      document.body.classList.toggle('modal-open', visible);
+    };
+
+    const restoreMobileBookingAction = (card) => {
+      const origin = mobileBookingOrigins.get(card);
+      const actions = card?.querySelector('.experience-actions') || origin?.actions;
+
+      if (!origin || !actions) {
+        card?.classList.remove('is-mobile-booking-layout');
+        card?.style.removeProperty('--experience-mobile-card-top');
+        return;
+      }
+
+      if (origin.nextSibling?.parentNode === origin.parent) {
+        origin.parent.insertBefore(actions, origin.nextSibling);
+      } else {
+        origin.parent.appendChild(actions);
+      }
+
+      actions.classList.remove('is-mobile-booking');
+      actions.style.removeProperty('--mobile-booking-top');
+      card.classList.remove('is-mobile-booking-layout');
+      card.style.removeProperty('--experience-mobile-card-top');
+      mobileBookingOrigins.delete(card);
+    };
+
+    const moveCardToModal = (card) => {
+      if (card.parentElement === modalLayer) return;
+
+      const rect = card.getBoundingClientRect();
+      const originParent = card.parentElement;
+      const computedStyle = window.getComputedStyle(card);
+      const placeholder = document.createElement('div');
+
+      placeholder.className = 'experience-card-placeholder';
+      placeholder.setAttribute('aria-hidden', 'true');
+      placeholder.style.height = `${rect.height}px`;
+      placeholder.style.minHeight = `${rect.height}px`;
+      placeholder.style.borderRadius = computedStyle.borderRadius;
+      placeholder.style.transition = 'height 320ms var(--ease-premium)';
+
+      cardOrigins.set(card, {
+        parent: originParent,
+        nextSibling: card.nextSibling,
+        placeholder,
+        rect,
+      });
+
+      card.before(placeholder);
+      modalLayer.appendChild(card);
+      card.classList.add('is-modal');
+    };
+
+    const restoreCardFromModal = (card) => {
+      const origin = cardOrigins.get(card);
+      if (!origin?.parent) return;
+
+      if (origin.placeholder?.parentNode === origin.parent) {
+        origin.parent.insertBefore(card, origin.placeholder);
+        origin.placeholder.remove();
+      } else if (origin.nextSibling?.parentNode === origin.parent) {
+        origin.parent.insertBefore(card, origin.nextSibling);
+      } else {
+        origin.parent.appendChild(card);
+      }
+
+      card.classList.remove('is-modal', 'is-expand-left', 'is-expanded', 'compact-layout');
+      cardOrigins.delete(card);
+    };
+
+    const restoreOriginalMainImage = (card) => {
+      const mainImage = card?.querySelector('.experience-image img');
+      const thumbnails = card?.querySelector('[data-thumbnails]');
+      const original = originalMainImages.get(card);
+
+      if (mainImage && original) {
+        ['src', 'srcset', 'sizes', 'alt'].forEach((attribute) => {
+          const value = original[attribute];
+          if (value === null || value === undefined) {
+            mainImage.removeAttribute(attribute);
+          } else {
+            mainImage.setAttribute(attribute, value);
+          }
+        });
+      }
+
+      thumbnails?.querySelectorAll('.experience-thumb').forEach((thumbnail, index) => {
+        thumbnail.classList.toggle('is-active', index === 0);
+        thumbnail.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+      });
+    };
+
+    const syncThumbnailLabels = () => {
+      cards.forEach((card) => {
+        const thumbnails = card.querySelector('[data-thumbnails]');
+        if (!thumbnails) return;
+
+        const label =
+          thumbnails.getAttribute('aria-label') ||
+          card.querySelector('[data-card-title]')?.textContent.trim() ||
+          '';
+
+        thumbnails.querySelectorAll('.experience-thumb').forEach((thumbnail, index) => {
+          thumbnail.setAttribute('aria-label', `${label} ${index + 1}`.trim());
+        });
+      });
+    };
+
+    const setupThumbnails = (card) => {
+      const mainImage = card.querySelector('.experience-image img');
+      const thumbnails = card.querySelector('[data-thumbnails]');
+      if (!mainImage || !thumbnails) return;
+
+      originalMainImages.set(card, {
+        src: mainImage.getAttribute('src'),
+        srcset: mainImage.getAttribute('srcset'),
+        sizes: mainImage.getAttribute('sizes'),
+        alt: mainImage.getAttribute('alt'),
+      });
+
+      const sourceMap = new Map();
+      cards.forEach((candidate) => {
+        const image = candidate.querySelector('.experience-image img');
+        const source = image?.getAttribute('src') || image?.currentSrc;
+        if (!source || sourceMap.has(source)) return;
+
+        sourceMap.set(source, {
+          src: source,
+          image,
+        });
+      });
+
+      thumbnails.replaceChildren();
+      Array.from(sourceMap.values()).forEach((source, index) => {
+        const button = document.createElement('button');
+        const image = document.createElement('img');
+
+        button.className = 'experience-thumb';
+        button.type = 'button';
+        button.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+        button.addEventListener('click', () => {
+          mainImage.removeAttribute('srcset');
+          mainImage.removeAttribute('sizes');
+          mainImage.setAttribute('src', source.src);
+          const sourceAlt = source.image?.getAttribute('alt') || '';
+          if (sourceAlt) mainImage.setAttribute('alt', sourceAlt);
+
+          thumbnails.querySelectorAll('.experience-thumb').forEach((thumbnail) => {
+            const isActive = thumbnail === button;
+            thumbnail.classList.toggle('is-active', isActive);
+            thumbnail.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          });
+        });
+
+        image.src = source.src;
+        image.alt = '';
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        button.appendChild(image);
+        thumbnails.appendChild(button);
+      });
+
+      syncThumbnailLabels();
+    };
+
+    const syncCardStates = () => {
+      cards.forEach((card, index) => {
+        const title = card.querySelector('[data-card-title]');
+        const details = card.querySelector('[data-card-details]');
+        const trigger = card.querySelector('[data-card-open]');
+        const closeButton = card.querySelector('[data-card-close]');
+        const isActive = card === activeCard;
+        const baseId = `experience-card-${index + 1}`;
+
+        if (title && !title.id) title.id = `${baseId}-title`;
+        if (details && !details.id) details.id = `${baseId}-details`;
+
+        card.classList.toggle('is-expanded', isActive);
+        card.classList.toggle('is-modal', isActive);
+
+        if (isActive) {
+          card.setAttribute('role', 'dialog');
+          card.setAttribute('aria-modal', 'true');
+          card.setAttribute('tabindex', '-1');
+          if (title?.id) card.setAttribute('aria-labelledby', title.id);
+          if (details?.id) card.setAttribute('aria-describedby', details.id);
+        } else {
+          card.removeAttribute('role');
+          card.removeAttribute('aria-modal');
+          card.removeAttribute('tabindex');
+          card.removeAttribute('aria-labelledby');
+          card.removeAttribute('aria-describedby');
+        }
+
+        details?.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+        trigger?.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+        closeButton?.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+        if (closeButton) closeButton.tabIndex = isActive ? 0 : -1;
+      });
+
+      modalLayer.setAttribute('aria-hidden', activeCard ? 'false' : 'true');
+    };
+
+    const focusActiveCard = () => {
+      if (!activeCard) return;
+
+      const target = activeCard.querySelector('[data-card-close]') || getFocusableElements()[0] || activeCard;
+      target.focus({ preventScroll: true });
+    };
+
+    const clearOpenState = ({ restoreFocus = true } = {}) => {
+      if (!activeCard) return;
+
+      const card = activeCard;
+      const trigger = lastTrigger;
+
+      setModalVisibility(false);
+      restoreOriginalMainImage(card);
+      restoreMobileBookingAction(card);
+      restoreCardFromModal(card);
+      activeCard = null;
+      lastTrigger = null;
+      syncCardStates();
+      syncMobileCarousel();
+
+      if (restoreFocus && trigger && typeof trigger.focus === 'function') {
+        trigger.focus({ preventScroll: true });
+      }
+    };
+
+    const openCard = (card, trigger) => {
+      if (!card) return;
+      if (activeCard && activeCard !== card) clearOpenState({ restoreFocus: false });
+
+      lastTrigger = trigger || null;
+      moveCardToModal(card);
+      activeCard = card;
+      syncCardStates();
+      setModalVisibility(true);
+      syncCompactLayout();
+      syncMobileBookingAction();
+
+      if (reduceMotionQuery.matches) {
+        focusActiveCard();
+        return;
+      }
+
+      window.requestAnimationFrame(() => {
+        syncMobileBookingAction();
+        focusActiveCard();
+      });
+    };
+
+    cards.forEach((card) => {
+      setupThumbnails(card);
+
+      const trigger = card.querySelector('[data-card-open]');
+      const closeButton = card.querySelector('[data-card-close]');
+
+      trigger?.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openCard(card, trigger);
+      });
+
+      closeButton?.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        clearOpenState();
+      });
+    });
+
+    dimmer?.addEventListener('click', clearOpenState);
+
+    document.addEventListener('keydown', (event) => {
+      if (!activeCard) return;
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        clearOpenState();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const focusables = getFocusableElements();
+      if (!focusables.length) {
+        event.preventDefault();
+        activeCard.focus({ preventScroll: true });
+        return;
+      }
+
+      const firstFocusable = focusables[0];
+      const lastFocusable = focusables[focusables.length - 1];
+      const currentFocus = document.activeElement;
+
+      if (event.shiftKey) {
+        if (!isFocusWithinCardModal(currentFocus) || currentFocus === firstFocusable) {
+          event.preventDefault();
+          lastFocusable.focus({ preventScroll: true });
+        }
+      } else if (!isFocusWithinCardModal(currentFocus) || currentFocus === lastFocusable) {
+        event.preventDefault();
+        firstFocusable.focus({ preventScroll: true });
+      }
+    });
+
+    grid.addEventListener('scroll', scheduleMobileCarouselSync, { passive: true });
+
+    carouselDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const index = Number(dot.dataset.carouselDot);
+        const targetCard = cards[index];
+
+        if (!targetCard || targetCard.parentElement !== grid) return;
+
+        grid.scrollTo({
+          left: targetCard.offsetLeft - (grid.clientWidth - targetCard.offsetWidth) / 2,
+          behavior: reduceMotionQuery.matches ? 'auto' : 'smooth',
+        });
+      });
+    });
+
+    const carouselHintObserver =
+      'IntersectionObserver' in window
+        ? new IntersectionObserver(
+            (entries, observer) => {
+              if (entries.some((entry) => entry.isIntersecting)) {
+                carouselSectionHasEntered = true;
+                syncMobileCarousel();
+                observer.disconnect();
+              }
+            },
+            { threshold: 0.35 }
+          )
+        : null;
+
+    if (carouselHintObserver) {
+      carouselHintObserver.observe(grid);
+    } else {
+      carouselSectionHasEntered = true;
+    }
+
+    const thumbnailLabelObserver =
+      'MutationObserver' in window
+        ? new MutationObserver((records) => {
+            if (records.some((record) => record.target.hasAttribute('data-thumbnails'))) {
+              syncThumbnailLabels();
+            }
+          })
+        : null;
+
+    thumbnailLabelObserver?.observe(experiencesRoot, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['aria-label'],
+    });
+
+    const visualViewport = window.visualViewport;
+    window.addEventListener('resize', scheduleExperienceViewportSync);
+    window.addEventListener('orientationchange', () => {
+      window.setTimeout(scheduleExperienceViewportSync, 150);
+    });
+    visualViewport?.addEventListener('resize', scheduleExperienceViewportSync);
+    visualViewport?.addEventListener('scroll', scheduleExperienceViewportSync);
+    window.addEventListener('load', scheduleExperienceViewportSync, { once: true });
+
+    experiencesRoot.style.setProperty('--experience-vh', `${getViewportHeight() * 0.01}px`);
+    syncCardStates();
+    syncCompactLayout();
+    syncMobileCarousel();
+  };
+
+  setupExperienceCards();
 
   // Header hide/show on scroll (mobile only)
   let lastScrollY = window.scrollY;

@@ -147,7 +147,7 @@
 
     <!-- Scenic break -->
     <section
-      class="scenic-break scenic-break-desktop"
+      class="scenic-break scenic-break-desktop reveal"
       aria-label="Passeio a cavalo junto à água ao pôr do sol"
     >
       <div class="scenic-scroll-cue" aria-hidden="true">
@@ -238,7 +238,7 @@
     </div>
 
     <section
-      class="scenic-break scenic-break-mobile"
+      class="scenic-break scenic-break-mobile reveal"
       aria-label="Passeio a cavalo junto à água ao pôr do sol"
     >
       <div class="scenic-scroll-cue" aria-hidden="true">
@@ -247,51 +247,326 @@
     </section>
 
     <!-- Experiences -->
-    <section class="section section-soft" id="experiences">
+    <section class="section section-soft experiences-section" id="experiences" data-experiences-root>
       <div class="container">
         <div class="section-head section-head-wide reveal">
           <p class="eyebrow" data-i18n="expEyebrow">Experiências</p>
           <h2 data-i18n="expTitle">
             Passeios a cavalo, descubra o melhor do Alentejo com a Ludus Equus
           </h2>
-          
         </div>
 
-        <div class="experiences-grid reveal">
-          <article class="info-card experience-card">
-            <figure class="image-card experience-image">
-              <img src="./imagens/Barragem_square.jpeg" alt="Passeio a cavalo junto à água ao pôr do sol" width="1200" height="1200" loading="lazy" decoding="async">
-            </figure>
-            <div class="experience-copy">
-              <h3 data-i18n="rideMainTitle">Passeio a Cavalo na Água</h3>
-              <p data-i18n="rideMainText">Descubra uma experiência única nas margens da Barragem do Alqueva, Neste passeio, terá a oportunidade de andar e nadar a cavalo, desfrutando de momentos mágicos em plena natureza. Para terminar, delicie-se com um agradével Pic-Nic, ideal para relaxar e saborear os produtos da região enquanto aprecia o magnífico pôr do sol sobre o Alqueva, um cenário verdadeiramente memorável.</p>
+        <div
+          class="carousel-indicator"
+          data-carousel-indicator
+          role="group"
+          aria-label="Posição da experiência"
+          data-i18n-attr="aria-label:experiencePositionLabel"
+        >
+          <button
+            class="carousel-dot"
+            type="button"
+            data-carousel-dot="0"
+            aria-label="Mostrar experiência 1"
+            data-i18n-attr="aria-label:experienceShow1"
+            aria-current="true"
+          ></button>
+          <button
+            class="carousel-dot"
+            type="button"
+            data-carousel-dot="1"
+            aria-label="Mostrar experiência 2"
+            data-i18n-attr="aria-label:experienceShow2"
+            aria-current="false"
+          ></button>
+          <button
+            class="carousel-dot"
+            type="button"
+            data-carousel-dot="2"
+            aria-label="Mostrar experiência 3"
+            data-i18n-attr="aria-label:experienceShow3"
+            aria-current="false"
+          ></button>
+        </div>
+
+        <div class="experiences-grid reveal" data-experience-grid>
+          <article class="info-card experience-card" data-experience-card>
+            <button
+              class="experience-close"
+              type="button"
+              data-card-close
+              aria-label="Fechar"
+              data-i18n-attr="aria-label:experienceClose"
+              aria-hidden="true"
+              tabindex="-1"
+            >
+              ×
+            </button>
+            <div class="experience-gallery" data-card-gallery>
+              <figure class="image-card experience-image">
+                <img
+                  src="./imagens/Barragem1.jpeg"
+                  alt="Passeio a cavalo junto à água ao pôr do sol"
+                  data-i18n-attr="alt:rideMainImageAlt"
+                  width="1600"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </figure>
+              <div
+                class="experience-thumbnails"
+                data-thumbnails
+                aria-label="Galeria da experiência"
+                data-i18n-attr="aria-label:experienceGalleryLabel"
+              ></div>
+            </div>
+            <div class="experience-content">
+              <div class="experience-copy">
+                <h3 id="experience-main-title" data-card-title data-i18n="rideMainTitle">Passeio a Cavalo na Água</h3>
+                <p class="experience-summary" data-i18n="rideMainSummary">
+                  Descubra uma experiência única nas margens da Barragem do Alqueva.
+                </p>
+                <div
+                  class="experience-meta"
+                  aria-label="Informação da experiência"
+                  data-i18n-attr="aria-label:experienceMetaLabel"
+                >
+                  <span class="experience-meta-item">
+                    <strong data-i18n="rideMainAvailability">Maio a outubro</strong>
+                    <small data-i18n="experienceAvailabilityLabel">Disponibilidade</small>
+                  </span>
+                  <span class="experience-meta-item">
+                    <strong data-i18n="rideMainIncludes">Piquenique incluído</strong>
+                    <small data-i18n="experienceIncludesLabel">Inclui</small>
+                  </span>
+                  <span class="experience-meta-item">
+                    <strong data-i18n="rideMainLocation">Em redor do Alqueva</strong>
+                    <small data-i18n="experiencePlaceLabel">Local</small>
+                  </span>
+                  <span class="experience-meta-item">
+                    <strong data-i18n="rideMainDurationRange">Cerca de 2h - 3h</strong>
+                    <small data-i18n="experienceDurationLabel">Duração</small>
+                  </span>
+                </div>
+                <button
+                  class="experience-trigger"
+                  type="button"
+                  data-card-open
+                  data-i18n="experienceLearnMore"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                  aria-controls="experience-main-details"
+                >
+                  Saber mais
+                </button>
+              </div>
+              <div id="experience-main-details" class="experience-details" data-card-details aria-hidden="true">
+                <p data-i18n="rideMainDetails">
+                  Neste passeio, terá a oportunidade de andar e nadar a cavalo, desfrutando de momentos mágicos em plena natureza. Para terminar, delicie-se com um agradável Pic-Nic, ideal para relaxar e saborear os produtos da região enquanto aprecia o magnífico pôr do sol sobre o Alqueva, um cenário verdadeiramente memorável.
+                </p>
+                <div class="experience-actions">
+                  <span class="experience-price">
+                    <small data-i18n="experiencePricingLabel">Preço esperado</small>
+                    <strong data-i18n="experiencePricingRequest">Disponível mediante pedido</strong>
+                  </span>
+                  <a
+                    class="experience-booking"
+                    href="https://wa.me/+351918241010"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-i18n="experienceBook"
+                  >
+                    Reservar este passeio
+                  </a>
+                </div>
+              </div>
             </div>
           </article>
 
-          <article class="info-card experience-card">
-            <figure class="image-card experience-image">
-              <img src="./imagens/passeio1_square.JPG" alt="Passeio a cavalo no campo" width="1200" height="1200" loading="lazy" decoding="async">
-            </figure>
-            <div class="experience-copy">
-              <h3 data-i18n="rideFieldsTitle">Passeio a Cavalo pelo Campo</h3>
-              <p data-i18n="rideFieldsText">Explore a beleza da paisagem alentejana num tranquilo passeio a cavalo entre vinhas e montado. Desfrute da serenidade da natureza, da vista deslumbrante e da autenticidade do Alentejo, numa experiência perfeita para relaxar e criar memórias inesquecíveis.</p>
+          <article class="info-card experience-card" data-experience-card>
+            <button
+              class="experience-close"
+              type="button"
+              data-card-close
+              aria-label="Fechar"
+              data-i18n-attr="aria-label:experienceClose"
+              aria-hidden="true"
+              tabindex="-1"
+            >
+              ×
+            </button>
+            <div class="experience-gallery" data-card-gallery>
+              <figure class="image-card experience-image">
+                <img
+                  src="./imagens/passeio1.JPG"
+                  alt="Passeio a cavalo no campo"
+                  data-i18n-attr="alt:rideFieldsImageAlt"
+                  width="1600"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </figure>
+              <div
+                class="experience-thumbnails"
+                data-thumbnails
+                aria-label="Galeria da experiência"
+                data-i18n-attr="aria-label:experienceGalleryLabel"
+              ></div>
+            </div>
+            <div class="experience-content">
+              <div class="experience-copy">
+                <h3 id="experience-fields-title" data-card-title data-i18n="rideFieldsTitle">Passeio a Cavalo pelo Campo</h3>
+                <p class="experience-summary" data-i18n="rideFieldsSummary">
+                  Explore a beleza da paisagem alentejana num tranquilo passeio entre vinhas e montado.
+                </p>
+                <div
+                  class="experience-meta"
+                  aria-label="Informação da experiência"
+                  data-i18n-attr="aria-label:experienceMetaLabel"
+                >
+                  <span class="experience-meta-item">
+                    <strong data-i18n="rideFieldsAvailability">Todo o ano</strong>
+                    <small data-i18n="experienceAvailabilityLabel">Disponibilidade</small>
+                  </span>
+                  <span class="experience-meta-item">
+                    <strong data-i18n="rideFieldsIncludes">Passeio guiado</strong>
+                    <small data-i18n="experienceIncludesLabel">Inclui</small>
+                  </span>
+                  <span class="experience-meta-item">
+                    <strong data-i18n="rideFieldsLocation">Quinta privada</strong>
+                    <small data-i18n="experiencePlaceLabel">Local</small>
+                  </span>
+                  <span class="experience-meta-item">
+                    <strong data-i18n="rideFieldsDurationRange">2h a 3h</strong>
+                    <small data-i18n="experienceDurationLabel">Duração</small>
+                  </span>
+                </div>
+                <button
+                  class="experience-trigger"
+                  type="button"
+                  data-card-open
+                  data-i18n="experienceLearnMore"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                  aria-controls="experience-fields-details"
+                >
+                  Saber mais
+                </button>
+              </div>
+              <div id="experience-fields-details" class="experience-details" data-card-details aria-hidden="true">
+                <p data-i18n="rideFieldsDetails">
+                  Desfrute da serenidade da natureza, da vista deslumbrante e da autenticidade do Alentejo, numa experiência perfeita para relaxar e criar memórias inesquecíveis.
+                </p>
+                <div class="experience-actions">
+                  <span class="experience-price">
+                    <small data-i18n="experiencePricingLabel">Preço esperado</small>
+                    <strong data-i18n="experiencePricingRequest">Disponível mediante pedido</strong>
+                  </span>
+                  <a
+                    class="experience-booking"
+                    href="https://wa.me/+351918241010"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-i18n="experienceBook"
+                  >
+                    Reservar este passeio
+                  </a>
+                </div>
+              </div>
             </div>
           </article>
 
-          <article class="info-card experience-card">
-            <figure class="image-card experience-image">
-              <img src="./imagens/pirquenique3.png" alt="Piquenique junto à água com manta e cesta" width="1200" height="1200" loading="lazy" decoding="async">
-            </figure>
-            <div class="experience-copy">
-              <h3 data-i18n="rideCustomTitle">Passeios personalizados</h3>
-              <p data-i18n="rideCustomText">Na Ludus Equus criamos passeios a cavalo à medida de cada ocasião. Seja para um team building, um pedido de casamento, uma despedida de solteiro(a), uma sessão fotográfica ou qualquer momento especial, desenvolvemos experiências personalizadas que combinam a beleza da paisagem alentejana com a autenticidade do mundo equestre. Partilhe connosco a sua ideia e transformaremos a sua ocasião numa experiência única e inesquecível.</p>
+          <article class="info-card experience-card" data-experience-card>
+            <button
+              class="experience-close"
+              type="button"
+              data-card-close
+              aria-label="Fechar"
+              data-i18n-attr="aria-label:experienceClose"
+              aria-hidden="true"
+              tabindex="-1"
+            >
+              ×
+            </button>
+            <div class="experience-gallery" data-card-gallery>
+              <figure class="image-card experience-image">
+                <img
+                  src="./imagens/Piquenique.jpeg"
+                  alt="Piquenique junto à água com manta e cesta"
+                  data-i18n-attr="alt:rideCustomImageAlt"
+                  width="1600"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </figure>
+            </div>
+            <div class="experience-content">
+              <div class="experience-copy">
+                <h3 id="experience-custom-title" data-card-title data-i18n="rideCustomTitle">Passeios personalizados</h3>
+                <p class="experience-summary" data-i18n="rideCustomSummary">
+                  Passeios a cavalo à medida de cada ocasião.
+                </p>
+                <div
+                  class="experience-meta"
+                  aria-label="Informação da experiência"
+                  data-i18n-attr="aria-label:experienceMetaLabel"
+                >
+                  <span class="experience-meta-item experience-meta-item-wide">
+                    <strong data-i18n="rideCustomMetaMessage">Tudo é possível. Contacte-nos e partilhe as suas ideias.</strong>
+                  </span>
+                  <span class="experience-meta-item experience-meta-item-wide">
+                    <strong class="experience-meta-emphasis" data-i18n="rideCustomGroupNote">Ideal para grupos grandes</strong>
+                  </span>
+                </div>
+                <button
+                  class="experience-trigger"
+                  type="button"
+                  data-card-open
+                  data-i18n="experienceLearnMore"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                  aria-controls="experience-custom-details"
+                >
+                  Saber mais
+                </button>
+              </div>
+              <div id="experience-custom-details" class="experience-details" data-card-details aria-hidden="true">
+                <p data-i18n="rideCustomDetails">
+                  Seja para um team building, um pedido de casamento, uma despedida de solteiro(a), uma sessão fotográfica ou qualquer momento especial, desenvolvemos experiências personalizadas que combinam a beleza da paisagem alentejana com a autenticidade do mundo equestre.
+                </p>
+                <div class="experience-actions">
+                  <span class="experience-price">
+                    <small data-i18n="experiencePricingLabel">Preço esperado</small>
+                    <strong data-i18n="experiencePricingRequest">Disponível mediante pedido</strong>
+                  </span>
+                  <a
+                    class="experience-booking"
+                    href="https://wa.me/+351918241010"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-i18n="experienceBook"
+                  >
+                    Reservar este passeio
+                  </a>
+                </div>
+              </div>
             </div>
           </article>
         </div>
 
-        <p class="experience-footer-note" data-i18n="rideBookingNote">
-          Disponibilidade e detalhes são alinhados diretamente por WhatsApp.
+        <div class="carousel-edge-hint" data-carousel-edge-hint aria-hidden="true"></div>
+        <p class="carousel-hint">
+          <span class="carousel-hint-line" aria-hidden="true"></span>
+          <span data-i18n="experienceSwipeHint">Deslize para explorar</span>
+          <span class="carousel-hint-line" aria-hidden="true"></span>
         </p>
+
+        <div class="card-dimmer" data-card-dimmer hidden aria-hidden="true"></div>
+        <div class="card-modal-layer" data-card-modal-layer aria-hidden="true"></div>
+
       </div>
     </section>
 
@@ -301,7 +576,7 @@
         <div class="section-head gallery-head reveal">
           <p class="eyebrow" data-i18n="galleryFeatureEyebrow">Galeria em movimento</p>
           <h2 data-i18n="galleryFeatureTitle">
-            Através destas imagens. Convidamo-lo a conhecer a essência da Ludus Equus, a harmonia entre a natureza, os cavalos e as experiências autênticas que tornam cada momento especial...
+            Através destas imagens. Convidamo-lo a essência da Ludus Equus <!--, a harmonia entre a natureza, os cavalos e as experiências autênticas que tornam cada momento especial...-->
           </h2>
         </div>
 
@@ -381,7 +656,7 @@
               <article class="gallery-strip-card gallery-strip-text-card">
                 <p class="gallery-strip-kicker" data-i18n="galleryStripKicker4">Desporto</p>
                 <h3 data-i18n="galleryStripTitle4">Energia, técnica e movimento.</h3>
-                <p data-i18n="galleryStripText4">Um bloco para separar a leitura das imagens mais dinâmicas do percurso.</p>
+                <p data-i18n="galleryStripText4">Desfrute da nossa componente desportiva.</p>
               </article>
 
               <figure class="gallery-strip-card">
@@ -422,7 +697,7 @@
           <div class="location-actions">
             <a
               class="btn btn-primary"
-              href="https://www.google.com/maps/search/Alqueva"
+              href="https://maps.app.goo.gl/vcqVNafJ2v9DB6XEA"
               target="_blank"
               rel="noopener noreferrer"
               data-i18n="locationButton"
@@ -582,7 +857,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="site-footer">
+  <footer class="site-footer reveal">
     <div class="container footer-grid">
       <div class="footer-brand">
         <img
@@ -631,7 +906,7 @@
         </a>
         <a
           class="footer-social-link footer-social-maps"
-          href="https://maps.app.goo.gl/T2FvivDZhSjyVxCJ9"
+          href="https://maps.app.goo.gl/vcqVNafJ2v9DB6XEA"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Abrir localização no Google Maps"
@@ -641,6 +916,18 @@
             <circle cx="12" cy="12" r="1.8"></circle>
           </svg>
           <span>Maps</span>
+        </a>
+        <a
+          class="footer-social-link footer-social-tiktok"
+          href="https://www.tiktok.com/@ludusequus?is_from_webapp=1&sender_device=pc"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="TikTok Ludus Equus"
+        >
+          <svg class="footer-social-icon footer-social-icon-tiktok" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M15.5 4.2c.4 1.5 1.3 2.4 2.8 2.8v2.2c-1.1-.1-2.1-.5-3-1.2v5.1a4.2 4.2 0 1 1-3.6-4.1v2.2a2 2 0 1 0 1.4 1.9V4.2h2.4Z"></path>
+          </svg>
+          <span>TikTok</span>
         </a>
       </div>
     </div>
