@@ -3707,6 +3707,14 @@ body {
     --experience-image-radius: 1.25rem;
   }
 
+  .experiences-section .experience-card.is-modal.is-expanded .experience-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .experiences-section .experience-card.is-modal.is-expanded .experience-meta-item:nth-child(4) {
+    display: flex;
+  }
+
   .experiences-section .section-head {
     margin-bottom: 3.6rem;
   }
